@@ -78,6 +78,9 @@ object PerformActions {
         }
     }
 
+    /**
+     * handles long key presses for shift
+     */
     private fun handleShift(shift: Boolean) {
         if (!shiftPressed && shift) {
             // TODO: press shift

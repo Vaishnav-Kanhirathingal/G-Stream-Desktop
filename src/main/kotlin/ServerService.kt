@@ -1,5 +1,7 @@
 package main
 
+import com.google.gson.Gson
+
 class ServerService {
     fun main() {
         displayQRCodeOnScreen()
@@ -7,19 +9,23 @@ class ServerService {
         startScreenSharingService()
     }
 
-    fun displayQRCodeOnScreen() {
+    private fun displayQRCodeOnScreen() {
         // TODO: show a qr code containing screen details on the screen.
     }
 
-    fun startControlService() {
+    private fun startControlService() {
         // TODO: get control data using http sockets.
     }
 
-    fun startScreenSharingService() {
+    private fun startScreenSharingService() {
         // TODO: send screen data using udp sockets
     }
 
-    fun performControls(control: Control) {
-        // TODO: perform controls
+    private fun performControls(controlJson: String) {
+        try {
+            PerformActions.performAction(Gson().fromJson(controlJson, Control::class.java))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
