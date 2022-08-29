@@ -1,11 +1,11 @@
 package main
 
 data class Control(
-        var mouseStrength: Int,
-        var mouseAngle: Int,
-        var gamePad: PadControls,
-        var playerMovement: JoyStickControls,
-        var shift: Boolean
+    var mouseStrength: Int,
+    var mouseAngle: Int,
+    var gamePad: PadControls,
+    var playerMovement: JoyStickControls,
+    var shift: Boolean
 )
 
 enum class JoyStickControls {

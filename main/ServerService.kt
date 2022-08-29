@@ -18,7 +18,8 @@ class ServerService {
     fun startScreenSharingService() {
         // TODO: send screen data using udp sockets
     }
-    fun performControls(control: Control){
 
+    fun performControls(control: Control) {
+        // TODO: perform controls
     }
 }
