@@ -2,6 +2,7 @@ package main
 
 import main.JoyStickControls.*
 import java.awt.Robot
+import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 
 object PerformActions {
@@ -19,9 +20,10 @@ object PerformActions {
     private var previousArrowKey: Int? = null
 
     /**
-     * Takes the responsibility of handling the actions of the left joystick
+     * Takes the responsibility of handling the actions of the left joystick. This includes the character movement
+     * controls.
      */
-    fun handleLeftJoystick(joyStickControls: JoyStickControls) {
+    private fun handleLeftJoystick(joyStickControls: JoyStickControls) {
         println("key press called ${joyStickControls.name}")
         if (previousArrowKey != null) {
             println("key release initiated")
@@ -40,29 +42,43 @@ object PerformActions {
             // TODO: keyPress isn't being held
             println("key pressed - $currentKey")
             robotControl.keyPress(currentKey)
-            previousArrowKey = currentKey
-        } else {
-            // TODO: check if release works
         }
+        previousArrowKey = currentKey
     }
 
-    fun handleRightJotStick(mouseAngle: Int, mouseStrength: Int) {
+    /**
+     * this includes the mouse movement using strength and angle as input.
+     */
+    private fun handleRightJotStick(mouseAngle: Int, mouseStrength: Int) {
         // TODO: use angle and strength to move mouse
-        robotControl.mouseMove(2000, 2000)
+//        robotControl.mouseMove(960, 540)
     }
 
-    fun handleGamePad(padControls: PadControls) {
+    /**
+     * handles right game-pad buttons.
+     */
+    private fun handleGamePad(padControls: PadControls) {
         when (padControls) {
             // TODO: perform necessary key presses with releases
-            PadControls.TRIANGLE -> {}
-            PadControls.SQUARE -> {}
-            PadControls.CIRCLE -> {}
-            PadControls.CROSS -> {}
-            PadControls.RELEASE -> {}
+            PadControls.TRIANGLE -> robotControl.keyPress(KeyEvent.VK_Q)
+            PadControls.SQUARE -> robotControl.keyPress(KeyEvent.VK_E)
+            PadControls.CIRCLE -> {
+                robotControl.mousePress(InputEvent.BUTTON3_DOWN_MASK)
+                robotControl.mouseRelease(InputEvent.BUTTON3_DOWN_MASK)
+            }
+
+            PadControls.CROSS -> {
+                robotControl.mousePress(InputEvent.BUTTON1_DOWN_MASK)
+                robotControl.mouseRelease(InputEvent.BUTTON1_DOWN_MASK)
+            }
+
+            PadControls.RELEASE -> {
+                // TODO: do nothing
+            }
         }
     }
 
-    fun handleShift(shift: Boolean) {
+    private fun handleShift(shift: Boolean) {
         if (!shiftPressed && shift) {
             // TODO: press shift
             println("shift pressed")
