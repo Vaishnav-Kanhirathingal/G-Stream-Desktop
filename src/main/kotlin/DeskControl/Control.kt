@@ -1,5 +1,3 @@
-package main
-
 data class Control(
     var mouseStrength: Int,
     var mouseAngle: Int,
