@@ -1,3 +1,5 @@
+package desk_control
+
 data class Control(
     var mouseStrength: Int,
     var mouseAngle: Int,

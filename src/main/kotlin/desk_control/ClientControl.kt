@@ -1,4 +1,6 @@
-import PerformActions.performAction
+package desk_control
+
+import desk_control.PerformActions.performAction
 
 fun main(args: Array<String>) {
     // TODO: 19-08-2022 connect with the server and send dummy messages to the server to check controls.

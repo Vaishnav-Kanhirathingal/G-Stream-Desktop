@@ -1,4 +1,6 @@
-import JoyStickControls.*
+package desk_control
+
+import desk_control.JoyStickControls.*
 import java.awt.Robot
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent

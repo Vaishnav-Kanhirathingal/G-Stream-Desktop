@@ -1,5 +1,6 @@
-import com.google.gson.Gson
+package desk_control
 
+import com.google.gson.Gson
 
 class ServerService {
     fun main() {
