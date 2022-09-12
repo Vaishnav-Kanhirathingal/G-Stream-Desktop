@@ -49,7 +49,7 @@ object PerformActions {
      */
     private fun handleRightJotStick(mouseAngle: Int, mouseStrength: Int) {
         // TODO: use angle and strength to move mouse
-//        robotControl.mouseMove(960, 540)
+        robotControl.mouseMove(960, 540)
     }
 
     /**

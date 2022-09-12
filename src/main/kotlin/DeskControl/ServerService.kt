@@ -1,4 +1,5 @@
-//import com.google.gson.Gson
+import com.google.gson.Gson
+
 
 class ServerService {
     fun main() {
@@ -21,7 +22,7 @@ class ServerService {
 
     private fun performControls(controlJson: String) {
         try {
-//            PerformActions.performAction(Gson().fromJson(controlJson, Control::class.java))
+            PerformActions.performAction(Gson().fromJson(controlJson, Control::class.java))
         } catch (e: Exception) {
             e.printStackTrace()
         }
