@@ -38,14 +38,14 @@ fun App() {
                 Text(text)
             })
             Image(
-                painter = getConnectionImageBitmap(),
+                painter = getConnectionImagePainter(),
                 contentDescription = "Scan this QRCode to connect to this game server to play games available on this device"
             )
         }
     }
 }
 
-fun getConnectionImageBitmap(): Painter {
+fun getConnectionImagePainter(size: Int = 400): Painter {
     // TODO: data should be appropriate type
     val screenSize: Dimension = Toolkit.getDefaultToolkit().screenSize
     val data = Gson().toJson(
@@ -58,7 +58,6 @@ fun getConnectionImageBitmap(): Painter {
             frameRateCap = 60,
         )
     )
-    val size = 400
     val link = "https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=$data"
     return getImageFromUrl(link = link)
 }
@@ -88,6 +87,7 @@ fun getImageFromUrl(link: String): Painter {
 fun main() = application {
     // TODO: get window icon url from mobile client
     Window(
+        icon = getImageFromUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE/blob/main/app/src/main/res/mipmap-hdpi/ic_launcher.png?raw=true"),
         title = "G-Stream",
         onCloseRequest = ::exitApplication,
         resizable = false
