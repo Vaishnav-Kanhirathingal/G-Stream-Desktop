@@ -19,6 +19,7 @@ repositories {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.google.code.gson:gson:2.9.1")
+    implementation("io.socket:socket.io-server:4.0.1")// TODO: use for low latency
 }
 
 tasks.withType<KotlinCompile> {

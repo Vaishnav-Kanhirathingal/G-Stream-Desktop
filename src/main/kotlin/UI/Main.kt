@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.toPainter
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.google.gson.Gson
-import com.sun.net.httpserver.HttpServer
 import connection.ConnectionData
 import java.awt.Dimension
 import java.awt.Toolkit
