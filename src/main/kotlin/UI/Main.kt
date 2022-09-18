@@ -19,6 +19,11 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.google.gson.Gson
 import connection.ConnectionData
+import desk_control.ClientControl
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import testing_socket_io.ServerIOTesting
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.ByteArrayOutputStream
@@ -99,5 +104,10 @@ private fun getStreamingPort(): Int {
  */
 private fun getControlPort(): Int {
     // TODO: open up a port and send back the details
-    return 0
+    val serverIOTesting = ServerIOTesting()
+    CoroutineScope(Dispatchers.IO).launch { serverIOTesting.initiateDataGetter() }
+    val port = serverIOTesting.serverSocket.localPort
+    print("port = $port")
+    ClientControl().main(port)
+    return port
 }

@@ -1,13 +1,20 @@
 package testing_socket_io
 
+import java.io.DataInputStream
 import java.net.ServerSocket
 
 class ServerIOTesting {
-}
-
-fun main(args: Array<String>) {
     val serverSocket = ServerSocket(0)
-    print("port value = ${serverSocket.localPort}")//works as expected. returns an empty port number.
-    serverSocket.accept()
-    serverSocket.close()
+
+    suspend fun initiateDataGetter() {
+        val inputStream = DataInputStream(serverSocket.accept().getInputStream())
+        val string = inputStream.readUTF()
+        print("string received = $string")
+        closeSocket()
+    }
+
+    private suspend fun closeSocket() {
+        print("closed port")
+        serverSocket.close()
+    }
 }
