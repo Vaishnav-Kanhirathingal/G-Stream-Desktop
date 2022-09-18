@@ -7,8 +7,7 @@ fun main(args: Array<String>) {
     try {
         performAction(
             Control(
-                mouseStrength = 0,
-                mouseAngle = 0,
+                mouseData = MouseData(0, 0),
                 gamePad = PadControls.CIRCLE,
                 playerMovement = JoyStickControls.STICK_LEFT,
                 shift = false

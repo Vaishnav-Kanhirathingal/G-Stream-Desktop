@@ -1,8 +1,7 @@
 package desk_control
 
 data class Control(
-    var mouseStrength: Int,
-    var mouseAngle: Int,
+    var mouseData: MouseData,
     var gamePad: PadControls,
     var playerMovement: JoyStickControls,
     var shift: Boolean
@@ -15,3 +14,8 @@ enum class JoyStickControls {
 enum class PadControls {
     TRIANGLE, SQUARE, CIRCLE, CROSS, RELEASE
 }
+
+data class MouseData(
+    var mouseStrength: Int,
+    var mouseAngle: Int,
+)

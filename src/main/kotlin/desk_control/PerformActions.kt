@@ -12,7 +12,7 @@ object PerformActions {
     fun performAction(control: Control) {
         // TODO: use the received data to perform actions on the device.
         handleLeftJoystick(control.playerMovement)
-        handleRightJotStick(control.mouseAngle, control.mouseStrength)
+        handleRightJotStick(control.mouseData)
         handleGamePad(control.gamePad)
         handleShift(control.shift)
     }
@@ -49,7 +49,7 @@ object PerformActions {
     /**
      * this includes the mouse movement using strength and angle as input.
      */
-    private fun handleRightJotStick(mouseAngle: Int, mouseStrength: Int) {
+    private fun handleRightJotStick(mouseData: MouseData) {
         // TODO: use angle and strength to move mouse
         robotControl.mouseMove(960, 540)
     }
