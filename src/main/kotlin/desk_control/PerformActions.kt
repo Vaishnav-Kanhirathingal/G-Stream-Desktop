@@ -25,24 +25,19 @@ object PerformActions {
      */
     private fun handleLeftJoystick(joyStickControls: JoyStickControls) {
         println("key press called ${joyStickControls.name}")
-        if (previousArrowKey != null) {
+        previousArrowKey?.let {
             println("key release initiated")
-            robotControl.keyRelease(previousArrowKey!!)
-            previousArrowKey = null
+            robotControl.keyRelease(it)
         }
         val currentKey: Int? =
             when (joyStickControls) {
-                STICK_RIGHT -> KeyEvent.VK_RIGHT
-                STICK_UP -> KeyEvent.VK_UP
-                STICK_LEFT -> KeyEvent.VK_LEFT
-                STICK_DOWN -> KeyEvent.VK_DOWN
+                STICK_UP -> KeyEvent.VK_W
+                STICK_LEFT -> KeyEvent.VK_A
+                STICK_DOWN -> KeyEvent.VK_S
+                STICK_RIGHT -> KeyEvent.VK_D
                 RELEASE -> null
             }
-        if (currentKey != null) {
-            // TODO: keyPress isn't being held
-            println("key pressed - $currentKey")
-            robotControl.keyPress(currentKey)
-        }
+        currentKey?.let { println("key pressed - $it");robotControl.keyPress(it) }
         previousArrowKey = currentKey
     }
 
