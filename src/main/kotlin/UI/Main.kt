@@ -19,7 +19,6 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.google.gson.Gson
 import connection.ConnectionData
-import desk_control.ClientControl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,9 +26,7 @@ import testing_socket_io.ServerIOTesting
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.ByteArrayOutputStream
-import java.net.HttpURLConnection
-import java.net.Inet4Address
-import java.net.URL
+import java.net.*
 import javax.imageio.ImageIO
 
 fun main() = application {
@@ -47,10 +44,7 @@ fun App() {
     var text by remember { mutableStateOf("Hello, World!") }
     MaterialTheme {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(ScrollState(0))
-                .horizontalScroll(ScrollState(0)),
+            modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)).horizontalScroll(ScrollState(0)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
@@ -68,7 +62,7 @@ fun getConnectionImagePainter(size: Int = 400): Painter {
     val screenSize: Dimension = Toolkit.getDefaultToolkit().screenSize
     val data = Gson().toJson(
         ConnectionData(
-            serverIpAddress = Inet4Address.getLocalHost().hostAddress,
+            serverIpAddress = getAddress(),
             controlPort = getControlPort(),
             streamPort = getStreamingPort(),
             horizontalResolution = screenSize.getWidth().toInt(),
@@ -80,14 +74,16 @@ fun getConnectionImagePainter(size: Int = 400): Painter {
     return getImageFromUrl(link = link)
 }
 
+fun getAddress(): String {
+    return "192.168.0.247"
+}
+
 fun getImageFromUrl(link: String): Painter {
     val connection = URL(link).openConnection() as HttpURLConnection
     connection.connect()
     val stream = ByteArrayOutputStream()
     ImageIO.write(ImageIO.read(connection.inputStream), "png", stream)
-    return org.jetbrains.skia.Image.makeFromEncoded(stream.toByteArray())
-        .toComposeImageBitmap()
-        .toAwtImage()
+    return org.jetbrains.skia.Image.makeFromEncoded(stream.toByteArray()).toComposeImageBitmap().toAwtImage()
         .toPainter()
 }
 
@@ -106,8 +102,5 @@ private fun getControlPort(): Int {
     // TODO: open up a port and send back the details
     val serverIOTesting = ServerIOTesting()
     CoroutineScope(Dispatchers.IO).launch { serverIOTesting.initiateDataGetter() }
-    val port = serverIOTesting.serverSocket.localPort
-    print("port = $port")
-    ClientControl().main(port)
-    return port
+    return serverIOTesting.serverSocket.localPort
 }
