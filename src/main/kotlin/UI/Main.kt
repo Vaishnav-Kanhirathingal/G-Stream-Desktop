@@ -26,7 +26,8 @@ import testing_socket_io.ServerIOTesting
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.ByteArrayOutputStream
-import java.net.*
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.imageio.ImageIO
 
 fun main() = application {
@@ -49,9 +50,16 @@ fun App() {
         ) {
             Image(
                 painter = getConnectionImagePainter(),
-                contentDescription = "Scan this QRCode to connect to this game server to play games available on this device",
+                contentDescription = null,
             )
             Text(text = "Scan this QRCode from the G-Stream app to initiate streaming from this device.")
+            Text(
+                text = "Instructions:\ngg" +
+                        "\n* Make sure Both the devices (This PC and the Android device) are on the same wifi network." +
+                        "\n* Preferably use a WIFI-6 connection for seamless experience." +
+                        "\n* A reduced load on the router ensures a better connection.",
+                modifier = Modifier.fillMaxWidth(),
+            )
             Button(onClick = { text = "Hello, Desktop!" }, content = { Text(text) })
         }
     }
@@ -75,6 +83,7 @@ fun getConnectionImagePainter(size: Int = 400): Painter {
 }
 
 fun getAddress(): String {
+    // TODO: set a code to return the desired ip
     return "192.168.0.247"
 }
 
