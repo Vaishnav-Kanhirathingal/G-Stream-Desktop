@@ -33,7 +33,7 @@ import javax.imageio.ImageIO
 fun main() = application {
     // TODO: get window icon url from mobile client
     Window(
-        icon = getImageFromUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE/blob/main/app/src/main/res/mipmap-hdpi/ic_launcher.png?raw=true"),
+        icon = getImageFromUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/blob/main/src/main/resources/app_icon_mipmap/mipmap-hdpi/ic_launcher.png?raw=true"),
         title = "G-Stream",
         onCloseRequest = ::exitApplication,
         resizable = false
