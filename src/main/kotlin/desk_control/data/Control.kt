@@ -1,4 +1,4 @@
-package desk_control
+package desk_control.data
 
 data class Control(
     var mouseData: MouseData,

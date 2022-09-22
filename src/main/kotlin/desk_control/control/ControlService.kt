@@ -1,25 +1,23 @@
-package testing_socket_io
+package desk_control.control
 
 import com.google.gson.Gson
-import desk_control.Control
-import desk_control.PerformActions
+import desk_control.data.Control
 import java.io.DataInputStream
 import java.net.ServerSocket
 
-class ServerIOTesting {
+class ControlService {
     val serverSocket = ServerSocket(0)
 
     suspend fun initiateDataGetter() {
         val inputStream = DataInputStream(serverSocket.accept().getInputStream())
-        for (i in 0..200) {
+        while (true) {
             val string = inputStream.readUTF()
-            print("string received = $string")
+            println("string received = $string")
             PerformActions.performAction(Gson().fromJson(string, Control::class.java))
         }
-        closeSocket()
     }
 
-    private suspend fun closeSocket() {
+    private fun closeSocket() {
         print("closed port")
         serverSocket.close()
     }

@@ -1,6 +1,13 @@
-package desk_control
+package desk_control.control
 
-import desk_control.JoyStickControls.*
+import desk_control.data.Control
+import desk_control.data.JoyStickControls
+import desk_control.data.JoyStickControls.*
+import desk_control.data.MouseData
+import desk_control.data.PadControls
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.awt.Robot
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
@@ -8,6 +15,10 @@ import java.awt.event.KeyEvent
 object PerformActions {
     private val robotControl = Robot()
     private var shiftPressed = false
+
+    init {
+        initiateLeftHandler()
+    }
 
     fun performAction(control: Control) {
         // TODO: use the received data to perform actions on the device.
@@ -17,28 +28,38 @@ object PerformActions {
         handleShift(control.shift)
     }
 
-    private var previousArrowKey: Int? = null
+    var leftKeyPressed: Int? = null
+    private fun initiateLeftHandler() {
+        CoroutineScope(Dispatchers.IO).launch {
+            var prev: Int? = null
+            while (true) {
+                while (true) {
+                    Thread.sleep(2)
+                    println("value = $prev, $leftKeyPressed")
+                    prev?.let {
+                        robotControl.keyRelease(it)
+                    }
+                    leftKeyPressed?.let {
+                        robotControl.keyPress(it)
+                    }
+                    prev = leftKeyPressed
+                }
+            }
+        }
+    }
 
     /**
      * Takes the responsibility of handling the actions of the left joystick. This includes the character movement
      * controls.
      */
     private fun handleLeftJoystick(joyStickControls: JoyStickControls) {
-        println("key press called ${joyStickControls.name}")
-        previousArrowKey?.let {
-            println("key release initiated")
-            robotControl.keyRelease(it)
+        leftKeyPressed = when (joyStickControls) {
+            STICK_UP -> KeyEvent.VK_W
+            STICK_LEFT -> KeyEvent.VK_A
+            STICK_DOWN -> KeyEvent.VK_S
+            STICK_RIGHT -> KeyEvent.VK_D
+            RELEASE -> null
         }
-        val currentKey: Int? =
-            when (joyStickControls) {
-                STICK_UP -> KeyEvent.VK_W
-                STICK_LEFT -> KeyEvent.VK_A
-                STICK_DOWN -> KeyEvent.VK_S
-                STICK_RIGHT -> KeyEvent.VK_D
-                RELEASE -> null
-            }
-        currentKey?.let { println("key pressed - $it");robotControl.keyPress(it) }
-        previousArrowKey = currentKey
     }
 
     /**
