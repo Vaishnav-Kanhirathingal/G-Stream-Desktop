@@ -109,7 +109,7 @@ private fun getStreamingPort(): Int {
  */
 private fun getControlPort(): Int {
     // TODO: open up a port and send back the details
-    val serverIOTesting = ControlService()
-    CoroutineScope(Dispatchers.IO).launch { serverIOTesting.initiateDataGetter() }
-    return serverIOTesting.serverSocket.localPort
+    val controlService = ControlService()
+    CoroutineScope(Dispatchers.IO).launch { controlService.initiateDataGetter() }
+    return controlService.serverSocket.localPort
 }

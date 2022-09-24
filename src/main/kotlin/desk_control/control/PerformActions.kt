@@ -13,7 +13,7 @@ import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 
 object PerformActions {
-    private val robotControl = Robot()
+    private val robot = Robot()
     private var shiftPressed = false
 
     init {
@@ -33,17 +33,15 @@ object PerformActions {
         CoroutineScope(Dispatchers.IO).launch {
             var prev: Int? = null
             while (true) {
-                while (true) {
-                    Thread.sleep(2)
-                    println("value = $prev, $leftKeyPressed")
-                    prev?.let {
-                        robotControl.keyRelease(it)
-                    }
-                    leftKeyPressed?.let {
-                        robotControl.keyPress(it)
-                    }
-                    prev = leftKeyPressed
+                Thread.sleep(2)
+                println("value = $prev, $leftKeyPressed")
+                prev?.let {
+                    robot.keyRelease(it)
                 }
+                leftKeyPressed?.let {
+                    robot.keyPress(it)
+                }
+                prev = leftKeyPressed
             }
         }
     }
@@ -67,7 +65,7 @@ object PerformActions {
      */
     private fun handleRightJotStick(mouseData: MouseData) {
         // TODO: use angle and strength to move mouse
-        robotControl.mouseMove(960, 540)
+        robot.mouseMove(960, 540)
     }
 
     /**
@@ -76,21 +74,11 @@ object PerformActions {
     private fun handleGamePad(padControls: PadControls) {
         when (padControls) {
             // TODO: perform necessary key presses with releases
-            PadControls.TRIANGLE -> robotControl.keyPress(KeyEvent.VK_Q)
-            PadControls.SQUARE -> robotControl.keyPress(KeyEvent.VK_E)
-            PadControls.CIRCLE -> {
-                robotControl.mousePress(InputEvent.BUTTON3_DOWN_MASK)
-                robotControl.mouseRelease(InputEvent.BUTTON3_DOWN_MASK)
-            }
-
-            PadControls.CROSS -> {
-                robotControl.mousePress(InputEvent.BUTTON1_DOWN_MASK)
-                robotControl.mouseRelease(InputEvent.BUTTON1_DOWN_MASK)
-            }
-
-            PadControls.RELEASE -> {
-                // TODO: do nothing
-            }
+            PadControls.TRIANGLE -> robot.apply { keyPress(KeyEvent.VK_Q); keyRelease(KeyEvent.VK_Q) }
+            PadControls.SQUARE -> robot.apply { keyPress(KeyEvent.VK_E); keyRelease(KeyEvent.VK_E) }
+            PadControls.CIRCLE -> robot.apply { mousePress(InputEvent.BUTTON3_DOWN_MASK);mouseRelease(InputEvent.BUTTON3_DOWN_MASK) }
+            PadControls.CROSS -> robot.apply { mousePress(InputEvent.BUTTON1_DOWN_MASK);mouseRelease(InputEvent.BUTTON1_DOWN_MASK) }
+            PadControls.RELEASE -> {}// TODO: do nothing
         }
     }
 
@@ -98,13 +86,10 @@ object PerformActions {
      * handles long key presses for shift
      */
     private fun handleShift(shift: Boolean) {
-        if (!shiftPressed && shift) {
-            // TODO: press shift
-            println("shift pressed")
-        } else if (shiftPressed && !shift) {
-            // TODO: release shift
-            println("shift released")
+        if (shiftPressed != shift) {
+            if (shift) robot.keyPress(KeyEvent.VK_SHIFT)
+            else robot.keyRelease(KeyEvent.VK_SHIFT)
+            shiftPressed = shift
         }
-        shiftPressed = shift
     }
 }
