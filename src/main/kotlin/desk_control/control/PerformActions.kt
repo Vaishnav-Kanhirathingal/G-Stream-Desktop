@@ -5,9 +5,6 @@ import desk_control.data.JoyStickControls
 import desk_control.data.JoyStickControls.*
 import desk_control.data.MouseData
 import desk_control.data.PadControls
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.awt.Robot
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
@@ -15,30 +12,11 @@ import java.awt.event.KeyEvent
 object PerformActions {
     private val robot = Robot()
 
-//    init {
-//        initiateLeftHandler()
-//    }
-
     fun performAction(control: Control) {
-        // TODO: use the received data to perform actions on the device.
         handleLeftJoystick(control.playerMovement)
         handleRightJotStick(control.mouseData)
         handleGamePad(control.gamePad)
         handleShift(control.shift)
-    }
-
-    // no longer necessary for repeated presses
-    private fun initiateLeftHandler() {
-        CoroutineScope(Dispatchers.IO).launch {
-            var prev: Int? = null
-            while (true) {
-                Thread.sleep(2)
-                println("value = $prev, $previousLeftJoystickAction")
-                prev?.let { robot.keyRelease(KeyEvent.VK_SHIFT); robot.keyRelease(it) }
-                previousLeftJoystickAction?.let { robot.keyPress(it);robot.keyPress(KeyEvent.VK_SHIFT) }
-                prev = previousLeftJoystickAction
-            }
-        }
     }
 
     private var previousLeftJoystickAction: Int? = null
@@ -71,7 +49,7 @@ object PerformActions {
      */
     private fun handleRightJotStick(mouseData: MouseData) {
         // TODO: use angle and strength to move mouse
-        robot.mouseMove(960, 540)
+        robot.mouseMove(mouseData.mouseAngle * 5, mouseData.mouseStrength * 10)
     }
 
     /**
@@ -79,12 +57,11 @@ object PerformActions {
      */
     private fun handleGamePad(padControls: PadControls) {
         when (padControls) {
-            // TODO: perform necessary key presses with releases
             PadControls.TRIANGLE -> robot.apply { keyPress(KeyEvent.VK_Q); keyRelease(KeyEvent.VK_Q) }
             PadControls.SQUARE -> robot.apply { keyPress(KeyEvent.VK_E); keyRelease(KeyEvent.VK_E) }
             PadControls.CIRCLE -> robot.apply { mousePress(InputEvent.BUTTON3_DOWN_MASK);mouseRelease(InputEvent.BUTTON3_DOWN_MASK) }
             PadControls.CROSS -> robot.apply { mousePress(InputEvent.BUTTON1_DOWN_MASK);mouseRelease(InputEvent.BUTTON1_DOWN_MASK) }
-            PadControls.RELEASE -> {}// TODO: do nothing
+            PadControls.RELEASE -> {}
         }
     }
 
