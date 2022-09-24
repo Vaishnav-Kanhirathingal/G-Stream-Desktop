@@ -14,11 +14,10 @@ import java.awt.event.KeyEvent
 
 object PerformActions {
     private val robot = Robot()
-    private var shiftPressed = false
 
-    init {
-        initiateLeftHandler()
-    }
+//    init {
+//        initiateLeftHandler()
+//    }
 
     fun performAction(control: Control) {
         // TODO: use the received data to perform actions on the device.
@@ -28,36 +27,43 @@ object PerformActions {
         handleShift(control.shift)
     }
 
-    var leftKeyPressed: Int? = null
+    // no longer necessary for repeated presses
     private fun initiateLeftHandler() {
         CoroutineScope(Dispatchers.IO).launch {
             var prev: Int? = null
             while (true) {
                 Thread.sleep(2)
-                println("value = $prev, $leftKeyPressed")
-                prev?.let {
-                    robot.keyRelease(it)
-                }
-                leftKeyPressed?.let {
-                    robot.keyPress(it)
-                }
-                prev = leftKeyPressed
+                println("value = $prev, $previousLeftJoystickAction")
+                prev?.let { robot.keyRelease(KeyEvent.VK_SHIFT); robot.keyRelease(it) }
+                previousLeftJoystickAction?.let { robot.keyPress(it);robot.keyPress(KeyEvent.VK_SHIFT) }
+                prev = previousLeftJoystickAction
             }
         }
     }
+
+    private var previousLeftJoystickAction: Int? = null
 
     /**
      * Takes the responsibility of handling the actions of the left joystick. This includes the character movement
      * controls.
      */
     private fun handleLeftJoystick(joyStickControls: JoyStickControls) {
-        leftKeyPressed = when (joyStickControls) {
+        val currentKey = when (joyStickControls) {
             STICK_UP -> KeyEvent.VK_W
             STICK_LEFT -> KeyEvent.VK_A
             STICK_DOWN -> KeyEvent.VK_S
             STICK_RIGHT -> KeyEvent.VK_D
             RELEASE -> null
         }
+        previousLeftJoystickAction?.let { robot.keyRelease(it) }
+        currentKey?.let { robot.keyPress(it) }
+
+        // this signifies a movement direction change. Hence, the shift key should be released if pressed
+        if (previousLeftJoystickAction != currentKey && shiftPressed) {
+            robot.keyRelease(KeyEvent.VK_SHIFT)
+            shiftPressed = false
+        }
+        previousLeftJoystickAction = currentKey
     }
 
     /**
@@ -82,14 +88,23 @@ object PerformActions {
         }
     }
 
+    private var prevShiftHandlerValue = false
+    private var shiftPressed = false
+
     /**
      * handles long key presses for shift
      */
-    private fun handleShift(shift: Boolean) {
-        if (shiftPressed != shift) {
-            if (shift) robot.keyPress(KeyEvent.VK_SHIFT)
-            else robot.keyRelease(KeyEvent.VK_SHIFT)
-            shiftPressed = shift
+    private fun handleShift(value: Boolean) {
+        if (value != prevShiftHandlerValue) { // this means the button was pressed on the android side
+            shiftPressed =
+                if (shiftPressed) {
+                    robot.keyRelease(KeyEvent.VK_SHIFT)
+                    false
+                } else {
+                    robot.keyPress(KeyEvent.VK_SHIFT)
+                    true
+                }
+            prevShiftHandlerValue = value
         }
     }
 }
