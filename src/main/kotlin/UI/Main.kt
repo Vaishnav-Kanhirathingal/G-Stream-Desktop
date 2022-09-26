@@ -86,7 +86,7 @@ fun getConnectionImagePainter(size: Int = 400): Painter {
 
 fun getAddress(): String {
     // TODO: set a code to return the desired ip
-    return "192.168.43.241"
+    return "192.168.249.207"
 }
 
 fun getImageFromUrl(link: String): Painter {

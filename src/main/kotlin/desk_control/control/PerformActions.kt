@@ -7,6 +7,8 @@ import desk_control.data.PadControls
 import java.awt.Robot
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
+import kotlin.math.cos
+import kotlin.math.sin
 
 object PerformActions {
     private val robot = Robot()
@@ -52,12 +54,20 @@ object PerformActions {
         previousLeftJoystickAction = currentKey
     }
 
+    var x = 0
+    var y = 0
+
     /**
      * this includes the mouse movement using strength and angle as input.
      */
     private fun handleRightJotStick(mouseData: MouseData) {
         // TODO: use angle and strength to move mouse
-        robot.mouseMove(mouseData.mouseAngle * 5, mouseData.mouseStrength * 10)
+        val dx = cos(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.4)
+        val dy = -sin(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.4)
+        x += dx.toInt()
+        y += dy.toInt()
+        println("x = $x,y = $y")
+        robot.mouseMove(x, y)
     }
 
     /**
