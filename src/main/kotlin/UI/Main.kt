@@ -20,9 +20,6 @@ import androidx.compose.ui.window.application
 import com.google.gson.Gson
 import connection.ConnectionData
 import desk_control.control.ControlService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.ByteArrayOutputStream
@@ -65,14 +62,19 @@ fun App() {
     }
 }
 
+val controlService = ControlService()
+
 fun getConnectionImagePainter(size: Int = 400): Painter {
     // TODO: check frame rate cap
     val screenSize: Dimension = Toolkit.getDefaultToolkit().screenSize
     val data = Gson().toJson(
         ConnectionData(
             serverIpAddress = getAddress(),
-            controlPort = getControlPort(),
             streamPort = getStreamingPort(),
+            movementPort = controlService.movementPort,
+            gamePadPort = controlService.gamePadPort,
+            mouseTrackPort = controlService.mouseTrackPort,
+            shiftPort = controlService.shiftPort,
             horizontalResolution = screenSize.getWidth().toInt(),
             verticalResolution = screenSize.getHeight().toInt(),
             frameRateCap = 60,
@@ -84,7 +86,7 @@ fun getConnectionImagePainter(size: Int = 400): Painter {
 
 fun getAddress(): String {
     // TODO: set a code to return the desired ip
-    return "192.168.0.247"
+    return "192.168.43.241"
 }
 
 fun getImageFromUrl(link: String): Painter {
@@ -92,7 +94,10 @@ fun getImageFromUrl(link: String): Painter {
     connection.connect()
     val stream = ByteArrayOutputStream()
     ImageIO.write(ImageIO.read(connection.inputStream), "png", stream)
-    return org.jetbrains.skia.Image.makeFromEncoded(stream.toByteArray()).toComposeImageBitmap().toAwtImage()
+    return org.jetbrains.skia.Image
+        .makeFromEncoded(stream.toByteArray())
+        .toComposeImageBitmap()
+        .toAwtImage()
         .toPainter()
 }
 
@@ -102,14 +107,4 @@ fun getImageFromUrl(link: String): Painter {
 private fun getStreamingPort(): Int {
     // TODO: open up a port and send back the details
     return 0
-}
-
-/**
- * initiates a server at an unused port and returns that port number. This function initiates a control port.
- */
-private fun getControlPort(): Int {
-    // TODO: open up a port and send back the details
-    val controlService = ControlService()
-    CoroutineScope(Dispatchers.IO).launch { controlService.initiateDataGetter() }
-    return controlService.serverSocket.localPort
 }

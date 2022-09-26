@@ -1,12 +1,5 @@
 package desk_control.data
 
-data class Control(
-    var mouseData: MouseData,
-    var gamePad: PadControls,
-    var playerMovement: JoyStickControls,
-    var shift: Boolean
-)
-
 enum class JoyStickControls {
     STICK_RIGHT, STICK_UP, STICK_LEFT, STICK_DOWN, RELEASE
 }

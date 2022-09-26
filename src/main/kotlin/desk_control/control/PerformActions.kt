@@ -1,6 +1,5 @@
 package desk_control.control
 
-import desk_control.data.Control
 import desk_control.data.JoyStickControls
 import desk_control.data.JoyStickControls.*
 import desk_control.data.MouseData
@@ -12,11 +11,20 @@ import java.awt.event.KeyEvent
 object PerformActions {
     private val robot = Robot()
 
-    fun performAction(control: Control) {
-        handleLeftJoystick(control.playerMovement)
-        handleRightJotStick(control.mouseData)
-        handleGamePad(control.gamePad)
-        handleShift(control.shift)
+    fun performMovementAction(joyStickControls: JoyStickControls) {
+        handleLeftJoystick(joyStickControls)
+    }
+
+    fun performGamePadAction(padControls: PadControls) {
+        handleGamePad(padControls)
+    }
+
+    fun performMouseTrackAction(mouseData: MouseData) {
+        handleRightJotStick(mouseData)
+    }
+
+    fun performShiftAction(boolean: Boolean) {
+        handleShift(boolean)
     }
 
     private var previousLeftJoystickAction: Int? = null
@@ -27,10 +35,10 @@ object PerformActions {
      */
     private fun handleLeftJoystick(joyStickControls: JoyStickControls) {
         val currentKey = when (joyStickControls) {
-            STICK_UP -> KeyEvent.VK_W
-            STICK_LEFT -> KeyEvent.VK_A
-            STICK_DOWN -> KeyEvent.VK_S
-            STICK_RIGHT -> KeyEvent.VK_D
+            STICK_UP -> KeyEvent.VK_UP
+            STICK_LEFT -> KeyEvent.VK_LEFT
+            STICK_DOWN -> KeyEvent.VK_DOWN
+            STICK_RIGHT -> KeyEvent.VK_RIGHT
             RELEASE -> null
         }
         previousLeftJoystickAction?.let { robot.keyRelease(it) }
