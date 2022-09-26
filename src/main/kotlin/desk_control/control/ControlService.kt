@@ -32,7 +32,6 @@ class ControlService {
         val inputStream = DataInputStream(movementServer.accept().getInputStream())
         while (true) {
             val string = inputStream.readUTF()
-            println("string received = $string")
             PerformActions.performMovementAction(Gson().fromJson(string, JoyStickControls::class.java))
         }
     }
@@ -41,7 +40,6 @@ class ControlService {
         val inputStream = DataInputStream(gamePadServer.accept().getInputStream())
         while (true) {
             val string = inputStream.readUTF()
-            println("string received = $string")
             PerformActions.performGamePadAction(Gson().fromJson(string, PadControls::class.java))
         }
     }
@@ -50,7 +48,6 @@ class ControlService {
         val inputStream = DataInputStream(mouseTrackServer.accept().getInputStream())
         while (true) {
             val string = inputStream.readUTF()
-            println("string received = $string")
             PerformActions.performMouseTrackAction(Gson().fromJson(string, MouseData::class.java))
         }
     }
@@ -59,7 +56,6 @@ class ControlService {
         val inputStream = DataInputStream(shiftServer.accept().getInputStream())
         while (true) {
             val string = inputStream.readUTF()
-            println("string received = $string")
             PerformActions.performShiftAction(Gson().fromJson(string, Boolean::class.java))
         }
     }

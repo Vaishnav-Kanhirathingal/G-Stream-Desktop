@@ -4,6 +4,7 @@ import desk_control.data.JoyStickControls
 import desk_control.data.JoyStickControls.*
 import desk_control.data.MouseData
 import desk_control.data.PadControls
+import java.awt.MouseInfo
 import java.awt.Robot
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
@@ -36,11 +37,18 @@ object PerformActions {
      * controls.
      */
     private fun handleLeftJoystick(joyStickControls: JoyStickControls) {
+//        val currentKey = when (joyStickControls) {
+//            STICK_UP -> KeyEvent.VK_UP
+//            STICK_LEFT -> KeyEvent.VK_LEFT
+//            STICK_DOWN -> KeyEvent.VK_DOWN
+//            STICK_RIGHT -> KeyEvent.VK_RIGHT
+//            RELEASE -> null
+//        }
         val currentKey = when (joyStickControls) {
-            STICK_UP -> KeyEvent.VK_UP
-            STICK_LEFT -> KeyEvent.VK_LEFT
-            STICK_DOWN -> KeyEvent.VK_DOWN
-            STICK_RIGHT -> KeyEvent.VK_RIGHT
+            STICK_UP -> KeyEvent.VK_W
+            STICK_LEFT -> KeyEvent.VK_A
+            STICK_DOWN -> KeyEvent.VK_S
+            STICK_RIGHT -> KeyEvent.VK_D
             RELEASE -> null
         }
         previousLeftJoystickAction?.let { robot.keyRelease(it) }
@@ -62,11 +70,8 @@ object PerformActions {
      */
     private fun handleRightJotStick(mouseData: MouseData) {
         // TODO: use angle and strength to move mouse
-        val dx = cos(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.4)
-        val dy = -sin(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.4)
-        x += dx.toInt()
-        y += dy.toInt()
-        println("x = $x,y = $y")
+        x += (cos(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.6)).toInt()
+        y += (-sin(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.6)).toInt()
         robot.mouseMove(x, y)
     }
 
