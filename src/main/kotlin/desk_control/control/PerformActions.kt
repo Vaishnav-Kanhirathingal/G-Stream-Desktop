@@ -68,26 +68,26 @@ object PerformActions {
     private fun handleRightJotStick(mouseData: MouseData) {
         // TODO: use angle and strength to move mouse
         val dx =
-            (cos(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.6)).toInt()
+            (cos(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.8)).toInt()
         val dy =
-            (-sin(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.6)).toInt()
-        val x = MouseInfo.getPointerInfo().location.x + dx
-        val y = MouseInfo.getPointerInfo().location.y + dy
-//        robot.mouseMove(x,y)
-        animateToPosition(dx, dy, 5)
+            (-sin(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.8)).toInt()
+        animateToPosition(dx = dx, dy = dy)
     }
 
-    private fun animateToPosition(dx: Int, dy: Int, frames: Int) {
+    private fun animateToPosition(
+        dx: Int,
+        dy: Int,
+        frames: Int = 5
+    ) {
+
         val x = MouseInfo.getPointerInfo().location.x.toFloat()
         val y = MouseInfo.getPointerInfo().location.y.toFloat()
         // TODO: perform within 5 ms
-        println("x = $x,y = $y")
+        println("x = $x,y = $y, dx = $dx, dy = $dy")
+
         for (i in 1..frames) {
-            Thread.sleep(6)
-            val X = (x + (dx * i) / frames).toInt()
-            val Y = (y + (dy * i) / frames).toInt()
-//            println("X = $X,Y = $Y")
-            robot.mouseMove(X, Y)
+            Thread.sleep(8)
+            robot.mouseMove((x + ((dx * i) / frames)).toInt(), (y + ((dy * i) / frames)).toInt())
         }
     }
 
