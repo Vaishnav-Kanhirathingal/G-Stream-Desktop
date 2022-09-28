@@ -1,23 +1,41 @@
 import java.awt.MouseInfo
 import java.awt.Robot
 
-val robot = Robot()
+var pastTime: Long? = null
 
 fun main() {
-    robot.mouseMove(0, 0)
-    animateToPosition(1920f, 1080f, 120f)
+    for (i in 0..10) {
+        val time = System.currentTimeMillis()
+        val gap = time - (pastTime ?: time)
+        pastTime = time
+        Thread.sleep(40)
+        val dx = (-400..400).random()
+        val dy = (-400..400).random()
+        animateToPosition(
+            dx = dx,
+            dy = dy,
+            timeGap = gap
+        )
+    }
 }
 
-fun animateToPosition(dx: Float, dy: Float, frames: Float) {
+val robot = Robot()
+
+private fun animateToPosition(
+    dx: Int,
+    dy: Int,
+    frames: Int = 5,
+    timeGap: Long
+) {
+    val duration = if (timeGap > 50) 50 else timeGap
+    val perFrameTiming = duration / frames
+    println("perFrameTiming : $perFrameTiming, \t\ttimeGap : $timeGap, \t\tdx : $dx,\t\tdy : $dy")
     val x = MouseInfo.getPointerInfo().location.x.toFloat()
     val y = MouseInfo.getPointerInfo().location.y.toFloat()
-    // TODO: perform within 5 ms
-    println("x = $x,y = $y")
-    for (i in 1..frames.toInt()) {
-        Thread.sleep(30)
-        val X = (x + (dx * i) / frames).toInt()
-        val Y = (y + (dy * i) / frames).toInt()
-        println("X = $X,Y = $Y")
-        robot.mouseMove(X, Y)
+    for (i in 1..frames) {
+        Thread.sleep(perFrameTiming)
+        val fx = (x + (dx * i) / frames).toInt()
+        val fy = (y + (dy * i) / frames).toInt()
+        robot.mouseMove(fx, fy)
     }
 }

@@ -13,44 +13,31 @@ import kotlin.math.sin
 
 object PerformActions {
     private val robot = Robot()
-
-    fun performMovementAction(joyStickControls: JoyStickControls) {
-        handleLeftJoystick(joyStickControls)
-    }
-
-    fun performGamePadAction(padControls: PadControls) {
-        handleGamePad(padControls)
-    }
-
-    fun performMouseTrackAction(mouseData: MouseData) {
-        handleRightJotStick(mouseData)
-    }
-
-    fun performShiftAction(boolean: Boolean) {
-        handleShift(boolean)
-    }
-
     private var previousLeftJoystickAction: Int? = null
 
     /**
      * Takes the responsibility of handling the actions of the left joystick. This includes the character movement
      * controls.
      */
-    private fun handleLeftJoystick(joyStickControls: JoyStickControls) {
-//        val currentKey = when (joyStickControls) {
-//            STICK_UP -> KeyEvent.VK_UP
-//            STICK_LEFT -> KeyEvent.VK_LEFT
-//            STICK_DOWN -> KeyEvent.VK_DOWN
-//            STICK_RIGHT -> KeyEvent.VK_RIGHT
-//            RELEASE -> null
-//        }
-        val currentKey = when (joyStickControls) {
-            STICK_UP -> KeyEvent.VK_W
-            STICK_LEFT -> KeyEvent.VK_A
-            STICK_DOWN -> KeyEvent.VK_S
-            STICK_RIGHT -> KeyEvent.VK_D
-            RELEASE -> null
-        }
+    fun performMovementAction(joyStickControls: JoyStickControls) {
+        val currentKey =
+            if (false) {
+                when (joyStickControls) {
+                    STICK_UP -> KeyEvent.VK_UP
+                    STICK_LEFT -> KeyEvent.VK_LEFT
+                    STICK_DOWN -> KeyEvent.VK_DOWN
+                    STICK_RIGHT -> KeyEvent.VK_RIGHT
+                    RELEASE -> null
+                }
+            } else {
+                when (joyStickControls) {
+                    STICK_UP -> KeyEvent.VK_W
+                    STICK_LEFT -> KeyEvent.VK_A
+                    STICK_DOWN -> KeyEvent.VK_S
+                    STICK_RIGHT -> KeyEvent.VK_D
+                    RELEASE -> null
+                }
+            }
         previousLeftJoystickAction?.let { robot.keyRelease(it) }
         currentKey?.let { robot.keyPress(it) }
 
@@ -65,7 +52,7 @@ object PerformActions {
     /**
      * this includes the mouse movement using strength and angle as input.
      */
-    private fun handleRightJotStick(mouseData: MouseData) {
+    fun performMouseTrackAction(mouseData: MouseData) {
         // TODO: use angle and strength to move mouse
         val dx =
             (cos(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.8)).toInt()
@@ -94,7 +81,7 @@ object PerformActions {
     /**
      * handles right game-pad buttons.
      */
-    private fun handleGamePad(padControls: PadControls) {
+    fun performGamePadAction(padControls: PadControls) {
         when (padControls) {
             PadControls.TRIANGLE -> robot.apply { keyPress(KeyEvent.VK_Q); keyRelease(KeyEvent.VK_Q) }
             PadControls.SQUARE -> robot.apply { keyPress(KeyEvent.VK_E); keyRelease(KeyEvent.VK_E) }
@@ -110,7 +97,7 @@ object PerformActions {
     /**
      * handles long key presses for shift
      */
-    private fun handleShift(value: Boolean) {
+    fun performShiftAction(value: Boolean) {
         if (value != prevShiftHandlerValue) { // this means the button was pressed on the android side
             shiftPressed =
                 if (shiftPressed) {

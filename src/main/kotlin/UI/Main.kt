@@ -1,4 +1,3 @@
-// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.horizontalScroll
@@ -28,7 +27,6 @@ import java.net.URL
 import javax.imageio.ImageIO
 
 fun main() = application {
-    // TODO: get window icon url from mobile client
     Window(
         icon = getImageFromUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/blob/main/src/main/resources/app_icon_mipmap/mipmap-hdpi/ic_launcher.png?raw=true"),
         title = "G-Stream",
@@ -86,7 +84,7 @@ fun getConnectionImagePainter(size: Int = 400): Painter {
 
 fun getAddress(): String {
     // TODO: set a code to return the desired ip
-    return "192.168.233.207"
+    return "192.168.43.241"
 }
 
 fun getImageFromUrl(link: String): Painter {
