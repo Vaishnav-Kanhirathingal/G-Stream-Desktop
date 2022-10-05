@@ -23,7 +23,9 @@ import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
+import java.net.NetworkInterface
 import java.net.URL
+import java.util.*
 import javax.imageio.ImageIO
 
 fun main() = application {
@@ -67,7 +69,7 @@ fun getConnectionImagePainter(size: Int = 400): Painter {
     val screenSize: Dimension = Toolkit.getDefaultToolkit().screenSize
     val data = Gson().toJson(
         ConnectionData(
-            serverIpAddress = getAddress(),
+            serverIpAddress = getAddress() ?: "null",
             streamPort = getStreamingPort(),
             movementPort = controlService.movementPort,
             gamePadPort = controlService.gamePadPort,
@@ -82,9 +84,19 @@ fun getConnectionImagePainter(size: Int = 400): Painter {
     return getImageFromUrl(link = link)
 }
 
-fun getAddress(): String {
-    // TODO: set a code to return the desired ip
-    return "192.168.43.241"
+fun getAddress(): String? {
+    for (netInterface in Collections.list(NetworkInterface.getNetworkInterfaces())) {
+        val listOfAddresses = Collections.list(netInterface.inetAddresses)
+        val isWlan = netInterface.name.contains("wlan")
+        if (listOfAddresses.isNotEmpty() && isWlan) {
+            for (inetAddress in listOfAddresses) {
+                println("\n\nDisplay name:\t${netInterface.displayName}\nName:\t\t\t${netInterface.name}\nInetAddress:\t${inetAddress.hostAddress}")
+                if (inetAddress.hostAddress.startsWith("192.168"))
+                    return inetAddress.hostAddress
+            }
+        }
+    }
+    return null
 }
 
 fun getImageFromUrl(link: String): Painter {
