@@ -1,6 +1,5 @@
 package connection
 
-// TODO: check and optimize for necessary data
 class ConnectionData(
     val serverIpAddress: String,
 

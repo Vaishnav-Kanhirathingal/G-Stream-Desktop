@@ -53,29 +53,26 @@ object PerformActions {
      * this includes the mouse movement using strength and angle as input.
      */
     fun performMouseTrackAction(mouseData: MouseData) {
-        // TODO: use angle and strength to move mouse
-        val dx =
-            (cos(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.8)).toInt()
-        val dy =
-            (-sin(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.8)).toInt()
-        animateToPosition(dx = dx, dy = dy)
+        animateToPosition(
+            dx = (cos(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.4)).toInt(),
+            dy = (-sin(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.4)).toInt()
+        )
     }
 
     private fun animateToPosition(
         dx: Int,
         dy: Int,
-        frames: Int = 5
+        frames: Int = 2
     ) {
+        val x = MouseInfo.getPointerInfo().location.x
+        val y = MouseInfo.getPointerInfo().location.y
 
-        val x = MouseInfo.getPointerInfo().location.x.toFloat()
-        val y = MouseInfo.getPointerInfo().location.y.toFloat()
-        // TODO: perform within 5 ms
-        println("x = $x,y = $y, dx = $dx, dy = $dy")
-
-        for (i in 1..frames) {
-            Thread.sleep(8)
-            robot.mouseMove((x + ((dx * i) / frames)).toInt(), (y + ((dy * i) / frames)).toInt())
+        repeat(frames) {
+            val i = it + 1
+            Thread.sleep(6)
+            robot.mouseMove((x + ((dx * i) / frames)), (y + ((dy * i) / frames)))
         }
+//        robot.mouseMove((x + dx).toInt(), (y + dy).toInt())
     }
 
     /**
