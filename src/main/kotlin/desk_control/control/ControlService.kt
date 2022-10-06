@@ -7,6 +7,7 @@ import desk_control.data.PadControls
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.awt.MouseInfo
 import java.io.DataInputStream
 import java.net.ServerSocket
 
@@ -22,10 +23,19 @@ class ControlService {
     val shiftPort get() = shiftServer.localPort
 
     init {
-        CoroutineScope(Dispatchers.IO).launch { initiateMovementServer() }
-        CoroutineScope(Dispatchers.IO).launch { initiateGamePadServer() }
-        CoroutineScope(Dispatchers.IO).launch { initiateMouseTrackServer() }
-        CoroutineScope(Dispatchers.IO).launch { initiateShiftServer() }
+        val scope = CoroutineScope(Dispatchers.IO)
+        scope.launch { initiateMovementServer() }
+        scope.launch { initiateGamePadServer() }
+        scope.launch { initiateMouseTrackServer() }
+        scope.launch { initiateShiftServer() }
+        scope.launch {
+            while (true) {
+                Thread.sleep(1000)
+                val x = MouseInfo.getPointerInfo().location.x
+                val y = MouseInfo.getPointerInfo().location.y
+                println("mouse: x = $x\t\ty = $y")
+            }
+        }
     }
 
     private suspend fun initiateMovementServer() {

@@ -53,9 +53,11 @@ object PerformActions {
      * this includes the mouse movement using strength and angle as input.
      */
     fun performMouseTrackAction(mouseData: MouseData) {
+        val angle = Math.toRadians(mouseData.mouseAngle.toDouble())
+        val strength = mouseData.mouseStrength.toDouble()
         animateToPosition(
-            dx = (cos(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.4)).toInt(),
-            dy = (-sin(Math.toRadians(mouseData.mouseAngle.toDouble())) * (mouseData.mouseStrength.toDouble() * 0.4)).toInt()
+            dx = (cos(angle) * (strength * 0.4)).toInt(),
+            dy = (-sin(angle) * (strength * 0.4)).toInt()
         )
     }
 
