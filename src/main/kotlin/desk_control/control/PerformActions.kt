@@ -54,10 +54,10 @@ object PerformActions {
      */
     fun performMouseTrackAction(mouseData: MouseData) {
         val angle = Math.toRadians(mouseData.mouseAngle.toDouble())
-        val strength = mouseData.mouseStrength.toDouble()
+        val strength = mouseData.mouseStrength.toDouble() * 0.4
         animateToPosition(
-            dx = (cos(angle) * (strength * 0.4)).toInt(),
-            dy = (-sin(angle) * (strength * 0.4)).toInt()
+            dx = (cos(angle) * strength).toInt(),
+            dy = (-sin(angle) * strength).toInt()
         )
     }
 
@@ -74,7 +74,6 @@ object PerformActions {
             Thread.sleep(6)
             robot.mouseMove((x + ((dx * i) / frames)), (y + ((dy * i) / frames)))
         }
-//        robot.mouseMove((x + dx).toInt(), (y + dy).toInt())
     }
 
     /**

@@ -7,9 +7,9 @@ import desk_control.data.PadControls
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.awt.MouseInfo
 import java.io.DataInputStream
 import java.net.ServerSocket
+import java.text.SimpleDateFormat
 
 class ControlService {
     private val movementServer = ServerSocket(0)
@@ -28,14 +28,14 @@ class ControlService {
         scope.launch { initiateGamePadServer() }
         scope.launch { initiateMouseTrackServer() }
         scope.launch { initiateShiftServer() }
-        scope.launch {
-            while (true) {
-                Thread.sleep(1000)
-                val x = MouseInfo.getPointerInfo().location.x
-                val y = MouseInfo.getPointerInfo().location.y
-                println("mouse: x = $x\t\ty = $y")
-            }
-        }
+//        scope.launch {
+//            while (true) {
+//                Thread.sleep(1000)
+//                val x = MouseInfo.getPointerInfo().location.x
+//                val y = MouseInfo.getPointerInfo().location.y
+//                println("mouse: x = $x\t\ty = $y")
+//            }
+//        }
     }
 
     private suspend fun initiateMovementServer() {
@@ -58,6 +58,7 @@ class ControlService {
         val inputStream = DataInputStream(mouseTrackServer.accept().getInputStream())
         while (true) {
             val string = inputStream.readUTF()
+            println("time - ${SimpleDateFormat("[yyyy-MM-dd]-[HH:mm:ss.SSS]").format(System.currentTimeMillis())}")
             PerformActions.performMouseTrackAction(Gson().fromJson(string, MouseData::class.java))
         }
     }
