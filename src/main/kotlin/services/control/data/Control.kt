@@ -1,4 +1,4 @@
-package desk_control.data
+package services.control.data
 
 enum class JoyStickControls {
     STICK_RIGHT, STICK_UP, STICK_LEFT, STICK_DOWN, RELEASE

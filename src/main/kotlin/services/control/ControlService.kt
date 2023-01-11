@@ -1,9 +1,9 @@
-package desk_control.control
+package services.control
 
 import com.google.gson.Gson
-import desk_control.data.JoyStickControls
-import desk_control.data.MouseData
-import desk_control.data.PadControls
+import services.control.data.JoyStickControls
+import services.control.data.MouseData
+import services.control.data.PadControls
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

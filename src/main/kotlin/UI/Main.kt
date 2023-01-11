@@ -18,7 +18,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.google.gson.Gson
 import connection.ConnectionData
-import desk_control.control.ControlService
+import services.control.ControlService
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.ByteArrayOutputStream

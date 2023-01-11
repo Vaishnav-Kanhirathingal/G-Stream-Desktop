@@ -1,9 +1,9 @@
-package desk_control.control
+package services.control
 
-import desk_control.data.JoyStickControls
-import desk_control.data.JoyStickControls.*
-import desk_control.data.MouseData
-import desk_control.data.PadControls
+import services.control.data.JoyStickControls
+import services.control.data.JoyStickControls.*
+import services.control.data.MouseData
+import services.control.data.PadControls
 import java.awt.MouseInfo
 import java.awt.Robot
 import java.awt.event.InputEvent
