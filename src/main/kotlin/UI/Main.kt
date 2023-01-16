@@ -19,6 +19,7 @@ import androidx.compose.ui.window.application
 import com.google.gson.Gson
 import connection.ConnectionData
 import services.control.ControlService
+import services.stream.StreamService
 import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.ByteArrayOutputStream
@@ -63,6 +64,7 @@ fun App() {
 }
 
 val controlService = ControlService()
+val streamService = StreamService()
 
 fun getConnectionImagePainter(size: Int = 400): Painter {
     // TODO: check frame rate cap
@@ -70,7 +72,8 @@ fun getConnectionImagePainter(size: Int = 400): Painter {
     val data = Gson().toJson(
         ConnectionData(
             serverIpAddress = getAddress() ?: "null",
-            streamPort = getStreamingPort(),
+            videoPort = streamService.screenPort,
+            audioPort = streamService.audioPort,
             movementPort = controlService.movementPort,
             gamePadPort = controlService.gamePadPort,
             mouseTrackPort = controlService.mouseTrackPort,
