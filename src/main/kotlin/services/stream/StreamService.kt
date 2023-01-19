@@ -22,21 +22,14 @@ class StreamService {
     }
 
     private suspend fun initiateVideoStreaming() {
-        println("1")
-        val x = screenSocket.accept()
-        println("2")
-        val y = x.getOutputStream()
-        println("3")
-        val outputStream = DataOutputStream(y)
+        val outputStream = DataOutputStream(screenSocket.accept().getOutputStream())
         var i = 0
-        println("4")
         while (true) {
             outputStream.apply {
+                i++
                 writeUTF("i = $i")
                 flush()
-                i++
             }
-            println("sent a string")
             Thread.sleep(100)
             /**
              * capture a few consecutive frames with a specified interval
