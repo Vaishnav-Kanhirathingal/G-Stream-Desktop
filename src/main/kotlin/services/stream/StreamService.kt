@@ -3,7 +3,7 @@ package services.stream
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.awt.Robot
+import java.io.DataOutputStream
 import java.net.ServerSocket
 
 // TODO: try implementing video conferencing app
@@ -17,14 +17,27 @@ class StreamService {
 
     init {
         val scope = CoroutineScope(Dispatchers.IO)
-
         scope.launch { initiateVideoStreaming() }
         scope.launch { initiateAudioStreaming() }
     }
 
     private suspend fun initiateVideoStreaming() {
-        val robot = Robot()
+        println("1")
+        val x = screenSocket.accept()
+        println("2")
+        val y = x.getOutputStream()
+        println("3")
+        val outputStream = DataOutputStream(y)
+        var i = 0
+        println("4")
         while (true) {
+            outputStream.apply {
+                writeUTF("i = $i")
+                flush()
+                i++
+            }
+            println("sent a string")
+            Thread.sleep(100)
             /**
              * capture a few consecutive frames with a specified interval
              * combine the captured frames into a packet using lossy compression
@@ -42,4 +55,9 @@ class StreamService {
  * formats checked -
  * WebM
  * HLS
+ * OBS (github)
+ * MPEG-DASH (Native support on Android devices)
+ * WebRTC (video conferencing protocol)
+ * H.323 (sends audio and video data streams via the User Datagram Protocol (UDP) )
+ * T.120 (covers communications over LAN)
  */

@@ -9,7 +9,6 @@ import services.control.data.MouseData
 import services.control.data.PadControls
 import java.io.DataInputStream
 import java.net.ServerSocket
-import java.text.SimpleDateFormat
 
 class ControlService {
     private val movementServer = ServerSocket(0)
@@ -58,7 +57,6 @@ class ControlService {
         val inputStream = DataInputStream(mouseTrackServer.accept().getInputStream())
         while (true) {
             val string = inputStream.readUTF()
-            println("time - ${SimpleDateFormat("[yyyy-MM-dd]-[HH:mm:ss.SSS]").format(System.currentTimeMillis())}")
             PerformActions.performMouseTrackAction(Gson().fromJson(string, MouseData::class.java))
         }
     }
