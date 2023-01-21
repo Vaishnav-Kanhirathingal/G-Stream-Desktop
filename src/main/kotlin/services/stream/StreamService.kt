@@ -3,6 +3,10 @@ package services.stream
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.jetbrains.skia.EncodedImageFormat
+import org.jetbrains.skiko.toImage
+import java.awt.Rectangle
+import java.awt.Robot
 import java.io.DataOutputStream
 import java.net.ServerSocket
 
@@ -17,6 +21,7 @@ class StreamService {
 
     init {
         val scope = CoroutineScope(Dispatchers.IO)
+        // TODO: set screen resolution
         scope.launch { initiateVideoStreaming() }
         scope.launch { initiateAudioStreaming() }
     }
@@ -24,18 +29,28 @@ class StreamService {
     private suspend fun initiateVideoStreaming() {
         val outputStream = DataOutputStream(screenSocket.accept().getOutputStream())
         var i = 0
+        val robot = Robot()
         while (true) {
+            //---------------------------------------------------------------------------------------------------------||
+
+            val data = robot
+                .createScreenCapture(Rectangle(384, 216))
+                .toImage()
+                .encodeToData(EncodedImageFormat.JPEG, 10)
+            val jpegByteArray = data?.bytes!!
+
+//            val text = "i = $i".toByteArray(charset = Charsets.UTF_8)
+
+            //---------------------------------------------------------------------------------------------------------||
             outputStream.apply {
                 i++
-                writeUTF("i = $i")
+                write(jpegByteArray)
                 flush()
             }
-            Thread.sleep(100)
-            /**
-             * capture a few consecutive frames with a specified interval
-             * combine the captured frames into a packet using lossy compression
-             * send those frames to the mobile device
-             */
+            println("frame sent - $i")
+            Thread.sleep(1000)
+            // TODO: capture a few consecutive frames with a specified interval combine the captured frames into a
+            //  packet using lossy compression send those frames to the mobile device
         }
     }
 
