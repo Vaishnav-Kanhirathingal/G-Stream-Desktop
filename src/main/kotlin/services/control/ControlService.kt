@@ -22,19 +22,12 @@ class ControlService {
     val shiftPort get() = shiftServer.localPort
 
     init {
-        val scope = CoroutineScope(Dispatchers.IO)
-        scope.launch { initiateMovementServer() }
-        scope.launch { initiateGamePadServer() }
-        scope.launch { initiateMouseTrackServer() }
-        scope.launch { initiateShiftServer() }
-//        scope.launch {
-//            while (true) {
-//                Thread.sleep(1000)
-//                val x = MouseInfo.getPointerInfo().location.x
-//                val y = MouseInfo.getPointerInfo().location.y
-//                println("mouse: x = $x\t\ty = $y")
-//            }
-//        }
+        CoroutineScope(Dispatchers.IO).apply {
+            launch { initiateMovementServer() }
+            launch { initiateGamePadServer() }
+            launch { initiateMouseTrackServer() }
+            launch { initiateShiftServer() }
+        }
     }
 
     private suspend fun initiateMovementServer() {
