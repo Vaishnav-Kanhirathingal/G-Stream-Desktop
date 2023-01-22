@@ -5,8 +5,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toComposeImageBitmap
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
 import org.jetbrains.skia.EncodedImageFormat
 import org.jetbrains.skiko.toImage
 import java.awt.DisplayMode
@@ -25,8 +23,7 @@ fun setRes() {
     val frame = JFrame()
     frame.setSize(x, y)
     frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-    val graphics = GraphicsEnvironment.getLocalGraphicsEnvironment()
-        .defaultScreenDevice
+    val graphics = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice
     graphics.fullScreenWindow = frame
     graphics.displayMode = DisplayMode(x, y, 32, 60)
     frame.isVisible = true
@@ -51,15 +48,12 @@ fun main() {
     val time = System.currentTimeMillis()
 
     repeat(120) {
-        val data = robot
-            .createScreenCapture(Rectangle(1920, 1080))
-            .toImage()
-            .encodeToData(format = EncodedImageFormat.JPEG, quality = 10)
-            ?.bytes
+        val data = robot.createScreenCapture(Rectangle(1920, 1080)).toImage()
+            .encodeToData(format = EncodedImageFormat.JPEG, quality = 10)?.bytes
         val file = File(folder, "randomFile__$it.jpeg")
         file.writeBytes(data!!)
         println("${file.canWrite()} ${file.exists()} ${file.absolutePath}")
     }
     val total = System.currentTimeMillis() - time
-    println("time taken = ${total}, mills per frame = ${total / 120}, frame rate = ${120000/total}")
+    println("time taken = ${total}, mills per frame = ${total / 120}, frame rate = ${120000 / total}")
 }

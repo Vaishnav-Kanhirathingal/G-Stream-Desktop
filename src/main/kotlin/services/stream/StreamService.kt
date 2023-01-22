@@ -1,5 +1,6 @@
 package services.stream
 
+import androidx.compose.foundation.Image
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,6 +32,7 @@ class StreamService {
         var i = 0
         val robot = Robot()
         while (true) {
+
             //---------------------------------------------------------------------------------------------------------||
 
             val data = robot
@@ -39,11 +41,10 @@ class StreamService {
                 .encodeToData(EncodedImageFormat.JPEG, 10)
             val jpegByteArray = data?.bytes!!
 
-//            val text = "i = $i".toByteArray(charset = Charsets.UTF_8)
-
             //---------------------------------------------------------------------------------------------------------||
             outputStream.apply {
                 i++
+                writeInt(jpegByteArray.size)
                 write(jpegByteArray)
                 flush()
             }
