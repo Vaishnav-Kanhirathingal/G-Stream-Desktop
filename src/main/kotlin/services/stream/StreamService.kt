@@ -1,6 +1,5 @@
 package services.stream
 
-import androidx.compose.foundation.Image
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,36 +19,43 @@ class StreamService {
     val screenPort get() = screenSocket.localPort
     val audioPort get() = audioSocket.localPort
 
+    private var frames = 0
+
     init {
         val scope = CoroutineScope(Dispatchers.IO)
         // TODO: set screen resolution
         scope.launch { initiateVideoStreaming() }
         scope.launch { initiateAudioStreaming() }
+        scope.launch {
+            while (true) {
+                Thread.sleep(1000)
+                println("frames per second = $frames")
+                frames = 0
+            }
+        }
     }
 
     private suspend fun initiateVideoStreaming() {
         val outputStream = DataOutputStream(screenSocket.accept().getOutputStream())
-        var i = 0
         val robot = Robot()
         while (true) {
 
             //---------------------------------------------------------------------------------------------------------||
 
-            val data = robot
-                .createScreenCapture(Rectangle(384, 216))
+            val data = robot.createScreenCapture(Rectangle(1920, 1080))
+                .getSubimage(0, 60, 1920, 960)
                 .toImage()
-                .encodeToData(EncodedImageFormat.JPEG, 10)
+                .encodeToData(EncodedImageFormat.JPEG, 60)
             val jpegByteArray = data?.bytes!!
 
             //---------------------------------------------------------------------------------------------------------||
             outputStream.apply {
-                i++
+                frames++
                 writeInt(jpegByteArray.size)
                 write(jpegByteArray)
                 flush()
             }
-            println("frame sent - $i")
-            Thread.sleep(1000)
+//            Thread.sleep(100)
             // TODO: capture a few consecutive frames with a specified interval combine the captured frames into a
             //  packet using lossy compression send those frames to the mobile device
         }
