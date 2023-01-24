@@ -7,10 +7,11 @@ import org.jetbrains.skia.EncodedImageFormat
 import org.jetbrains.skiko.toImage
 import java.awt.Rectangle
 import java.awt.Robot
+import java.awt.geom.AffineTransform
+import java.awt.image.AffineTransformOp
+import java.awt.image.BufferedImage
 import java.io.DataOutputStream
 import java.net.ServerSocket
-
-// TODO: try implementing video conferencing app
 
 class StreamService {
     private val screenSocket = ServerSocket(0)
@@ -35,17 +36,30 @@ class StreamService {
         }
     }
 
+    private val outPutWidth = 1920/3
+    private val outPutHeight = 1080/3
+
     private suspend fun initiateVideoStreaming() {
         val outputStream = DataOutputStream(screenSocket.accept().getOutputStream())
         val robot = Robot()
         while (true) {
 
             //---------------------------------------------------------------------------------------------------------||
+            val fullScaleImage = robot.createScreenCapture(Rectangle(1920, 1080))
 
-            val data = robot.createScreenCapture(Rectangle(1920, 1080))
-                .getSubimage(0, 60, 1920, 960)
-                .toImage()
-                .encodeToData(EncodedImageFormat.JPEG, 60)
+            //---------------------------------------------------------------------------------------------------------24Max
+            val bufferedImage1 =
+                AffineTransformOp(AffineTransform.getScaleInstance(0.5, 0.5), AffineTransformOp.TYPE_BILINEAR).filter(
+                    fullScaleImage, BufferedImage(outPutWidth, outPutHeight, fullScaleImage.type)
+                )
+
+            //---------------------------------------------------------------------------------------------------------25Max
+            val bufferedImage2 = BufferedImage(outPutWidth, outPutHeight, BufferedImage.TYPE_INT_ARGB)
+            val graphics = bufferedImage2.createGraphics()
+            graphics.drawImage(fullScaleImage, 0, 0, outPutWidth, outPutHeight, null)
+            graphics.dispose()
+
+            val data = bufferedImage2.toImage().encodeToData(EncodedImageFormat.JPEG, 60)
             val jpegByteArray = data?.bytes!!
 
             //---------------------------------------------------------------------------------------------------------||
@@ -55,7 +69,6 @@ class StreamService {
                 write(jpegByteArray)
                 flush()
             }
-//            Thread.sleep(100)
             // TODO: capture a few consecutive frames with a specified interval combine the captured frames into a
             //  packet using lossy compression send those frames to the mobile device
         }
