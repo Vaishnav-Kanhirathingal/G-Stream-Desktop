@@ -10,6 +10,4 @@ class ConnectionData(
     val leftJoyStickPort: Int,
     val rightGamePadPort: Int,
     val rightJoyStickPort: Int,
-
-//    val shiftPort: Int,
 )

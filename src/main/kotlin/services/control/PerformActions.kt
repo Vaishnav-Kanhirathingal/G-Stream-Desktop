@@ -2,9 +2,8 @@ package services.control
 
 import services.control.data.JoyStickControls
 import services.control.data.JoyStickControls.*
-import services.control.data.LeftPadControls
 import services.control.data.MouseData
-import services.control.data.RightPadControls
+import services.control.data.PadControls
 import java.awt.MouseInfo
 import java.awt.Robot
 import java.awt.event.InputEvent
@@ -77,13 +76,13 @@ object PerformActions {
     /**
      * handles right game-pad buttons.
      */
-    fun performGamePadAction(rightPadControls: RightPadControls) {
-        when (rightPadControls) {
-            RightPadControls.TOP -> robot.apply {}
-            RightPadControls.LEFT -> robot.apply {}
-            RightPadControls.RIGHT -> robot.apply {}
-            RightPadControls.BOTTOM -> robot.apply {}
-            RightPadControls.CENTER -> robot.apply { mousePress(InputEvent.BUTTON1_DOWN_MASK);mouseRelease(InputEvent.BUTTON1_DOWN_MASK) }
+    fun performGamePadAction(padControls: PadControls) {
+        when (padControls) {
+            PadControls.TOP -> robot.apply {}
+            PadControls.LEFT -> robot.apply {}
+            PadControls.RIGHT -> robot.apply {}
+            PadControls.BOTTOM -> robot.apply {}
+            PadControls.CENTER -> robot.apply { mousePress(InputEvent.BUTTON1_DOWN_MASK);mouseRelease(InputEvent.BUTTON1_DOWN_MASK) }
         }
     }
 
@@ -103,13 +102,13 @@ object PerformActions {
 
     }
 
-    fun performLeftGamePadAction(leftPadControls: LeftPadControls) {
-        when (leftPadControls) {
-            LeftPadControls.TOP -> robot.apply { performShiftAction() }
-            LeftPadControls.LEFT -> robot.apply {}
-            LeftPadControls.RIGHT -> robot.apply {}
-            LeftPadControls.BOTTOM -> robot.apply {}
-            LeftPadControls.CENTER -> robot.apply { mousePress(InputEvent.BUTTON3_DOWN_MASK);mouseRelease(InputEvent.BUTTON3_DOWN_MASK) }
+    fun performLeftGamePadAction(padControls: PadControls) {
+        when (padControls) {
+            PadControls.TOP -> robot.apply { performShiftAction() }
+            PadControls.LEFT -> robot.apply {}
+            PadControls.RIGHT -> robot.apply {}
+            PadControls.BOTTOM -> robot.apply {}
+            PadControls.CENTER -> robot.apply { mousePress(InputEvent.BUTTON3_DOWN_MASK);mouseRelease(InputEvent.BUTTON3_DOWN_MASK) }
         }
     }
 }

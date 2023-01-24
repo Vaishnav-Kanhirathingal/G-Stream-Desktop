@@ -5,9 +5,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import services.control.data.JoyStickControls
-import services.control.data.LeftPadControls
 import services.control.data.MouseData
-import services.control.data.RightPadControls
+import services.control.data.PadControls
 import java.io.DataInputStream
 import java.net.ServerSocket
 
@@ -27,7 +26,6 @@ class ControlService {
             launch { initiateMovementServer() }
             launch { initiateGamePadServer() }
             launch { initiateMouseTrackServer() }
-//            launch { initiateShiftServer() }
             launch { initiateLeftGamePadServer() }
         }
     }
@@ -44,7 +42,7 @@ class ControlService {
         val inputStream = DataInputStream(gamePadServer.accept().getInputStream())
         while (true) {
             val string = inputStream.readUTF()
-            PerformActions.performGamePadAction(Gson().fromJson(string, RightPadControls::class.java))
+            PerformActions.performGamePadAction(Gson().fromJson(string, PadControls::class.java))
         }
     }
 
@@ -60,7 +58,7 @@ class ControlService {
         val inputStream = DataInputStream(leftGamePadServer.accept().getInputStream())
         while (true) {
             val string = inputStream.readUTF()
-            PerformActions.performLeftGamePadAction(Gson().fromJson(string, LeftPadControls::class.java))
+            PerformActions.performLeftGamePadAction(Gson().fromJson(string, PadControls::class.java))
         }
     }
 }
