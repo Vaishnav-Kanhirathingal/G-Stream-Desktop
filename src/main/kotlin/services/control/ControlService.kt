@@ -42,7 +42,7 @@ class ControlService {
         val inputStream = DataInputStream(gamePadServer.accept().getInputStream())
         while (true) {
             val string = inputStream.readUTF()
-            PerformActions.performGamePadAction(Gson().fromJson(string, PadControls::class.java))
+            PerformActions.performRightGamePadAction(Gson().fromJson(string, PadControls::class.java))
         }
     }
 

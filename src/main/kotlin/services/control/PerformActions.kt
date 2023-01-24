@@ -76,13 +76,23 @@ object PerformActions {
     /**
      * handles right game-pad buttons.
      */
-    fun performGamePadAction(padControls: PadControls) {
+    fun performRightGamePadAction(padControls: PadControls) {
         when (padControls) {
-            PadControls.TOP -> robot.apply {}
+            PadControls.TOP -> robot.apply { keyPress(KeyEvent.VK_TAB);keyRelease(KeyEvent.VK_TAB) }
+            PadControls.BOTTOM -> robot.apply {}
+            PadControls.LEFT -> robot.apply { keyPress(KeyEvent.VK_Q);keyRelease(KeyEvent.VK_Q) }
+            PadControls.RIGHT -> robot.apply { keyPress(KeyEvent.VK_E);keyRelease(KeyEvent.VK_E) }
+            PadControls.CENTER -> robot.apply { mousePress(InputEvent.BUTTON1_DOWN_MASK);mouseRelease(InputEvent.BUTTON1_DOWN_MASK) }
+        }
+    }
+
+    fun performLeftGamePadAction(padControls: PadControls) {
+        when (padControls) {
+            PadControls.TOP -> robot.apply { performShiftAction() }
+            PadControls.BOTTOM -> robot.apply { keyPress(KeyEvent.VK_C);keyRelease(KeyEvent.VK_C) }
             PadControls.LEFT -> robot.apply {}
             PadControls.RIGHT -> robot.apply {}
-            PadControls.BOTTOM -> robot.apply {}
-            PadControls.CENTER -> robot.apply { mousePress(InputEvent.BUTTON1_DOWN_MASK);mouseRelease(InputEvent.BUTTON1_DOWN_MASK) }
+            PadControls.CENTER -> robot.apply { mousePress(InputEvent.BUTTON3_DOWN_MASK);mouseRelease(InputEvent.BUTTON3_DOWN_MASK) }
         }
     }
 
@@ -102,13 +112,4 @@ object PerformActions {
 
     }
 
-    fun performLeftGamePadAction(padControls: PadControls) {
-        when (padControls) {
-            PadControls.TOP -> robot.apply { performShiftAction() }
-            PadControls.LEFT -> robot.apply {}
-            PadControls.RIGHT -> robot.apply {}
-            PadControls.BOTTOM -> robot.apply {}
-            PadControls.CENTER -> robot.apply { mousePress(InputEvent.BUTTON3_DOWN_MASK);mouseRelease(InputEvent.BUTTON3_DOWN_MASK) }
-        }
-    }
 }
