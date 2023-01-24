@@ -2,8 +2,9 @@ package services.control
 
 import services.control.data.JoyStickControls
 import services.control.data.JoyStickControls.*
+import services.control.data.LeftPadControls
 import services.control.data.MouseData
-import services.control.data.PadControls
+import services.control.data.RightPadControls
 import java.awt.MouseInfo
 import java.awt.Robot
 import java.awt.event.InputEvent
@@ -42,9 +43,9 @@ object PerformActions {
         currentKey?.let { robot.keyPress(it) }
 
         // this signifies a movement direction change. Hence, the shift key should be released if pressed
-        if (previousLeftJoystickAction != currentKey && shiftPressed) {
+        if (previousLeftJoystickAction != currentKey && pressed) {
             robot.keyRelease(KeyEvent.VK_SHIFT)
-            shiftPressed = false
+            pressed = false
         }
         previousLeftJoystickAction = currentKey
     }
@@ -56,15 +57,12 @@ object PerformActions {
         val angle = Math.toRadians(mouseData.mouseAngle.toDouble())
         val strength = mouseData.mouseStrength.toDouble() * 0.4
         animateToPosition(
-            dx = (cos(angle) * strength).toInt(),
-            dy = (-sin(angle) * strength).toInt()
+            dx = (cos(angle) * strength).toInt(), dy = (-sin(angle) * strength).toInt()
         )
     }
 
     private fun animateToPosition(
-        dx: Int,
-        dy: Int,
-        frames: Int = 2
+        dx: Int, dy: Int, frames: Int = 2
     ) {
         val x = MouseInfo.getPointerInfo().location.x
         val y = MouseInfo.getPointerInfo().location.y
@@ -79,33 +77,39 @@ object PerformActions {
     /**
      * handles right game-pad buttons.
      */
-    fun performGamePadAction(padControls: PadControls) {
-        when (padControls) {
-            PadControls.TRIANGLE -> robot.apply { keyPress(KeyEvent.VK_Q); keyRelease(KeyEvent.VK_Q) }
-            PadControls.SQUARE -> robot.apply { keyPress(KeyEvent.VK_E); keyRelease(KeyEvent.VK_E) }
-            PadControls.CIRCLE -> robot.apply { mousePress(InputEvent.BUTTON3_DOWN_MASK);mouseRelease(InputEvent.BUTTON3_DOWN_MASK) }
-            PadControls.CROSS -> robot.apply { mousePress(InputEvent.BUTTON1_DOWN_MASK);mouseRelease(InputEvent.BUTTON1_DOWN_MASK) }
-            PadControls.RELEASE -> {}
+    fun performGamePadAction(rightPadControls: RightPadControls) {
+        when (rightPadControls) {
+            RightPadControls.TOP -> robot.apply {}
+            RightPadControls.LEFT -> robot.apply {}
+            RightPadControls.RIGHT -> robot.apply {}
+            RightPadControls.BOTTOM -> robot.apply {}
+            RightPadControls.CENTER -> robot.apply { mousePress(InputEvent.BUTTON1_DOWN_MASK);mouseRelease(InputEvent.BUTTON1_DOWN_MASK) }
         }
     }
 
-    private var prevShiftHandlerValue = false
-    private var shiftPressed = false
+    private var pressed = false
 
     /**
      * handles long key presses for shift
      */
-    fun performShiftAction(value: Boolean) {
-        if (value != prevShiftHandlerValue) { // this means the button was pressed on the android side
-            shiftPressed =
-                if (shiftPressed) {
-                    robot.keyRelease(KeyEvent.VK_SHIFT)
-                    false
-                } else {
-                    robot.keyPress(KeyEvent.VK_SHIFT)
-                    true
-                }
-            prevShiftHandlerValue = value
+    private fun performShiftAction() {
+        pressed = if (pressed) {
+            robot.keyRelease(KeyEvent.VK_SHIFT)
+            false
+        } else {
+            robot.keyPress(KeyEvent.VK_SHIFT)
+            true
+        }
+
+    }
+
+    fun performLeftGamePadAction(leftPadControls: LeftPadControls) {
+        when (leftPadControls) {
+            LeftPadControls.TOP -> robot.apply { performShiftAction() }
+            LeftPadControls.LEFT -> robot.apply {}
+            LeftPadControls.RIGHT -> robot.apply {}
+            LeftPadControls.BOTTOM -> robot.apply {}
+            LeftPadControls.CENTER -> robot.apply { mousePress(InputEvent.BUTTON3_DOWN_MASK);mouseRelease(InputEvent.BUTTON3_DOWN_MASK) }
         }
     }
 }

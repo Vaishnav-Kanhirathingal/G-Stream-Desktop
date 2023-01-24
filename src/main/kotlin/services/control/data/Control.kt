@@ -2,8 +2,7 @@ package services.control.data
 
 import com.google.gson.annotations.SerializedName
 import services.control.data.JoyStickControls.*
-import services.control.data.JoyStickControls.RELEASE
-import services.control.data.PadControls.*
+import services.control.data.RightPadControls.*
 
 
 /**
@@ -28,23 +27,40 @@ enum class JoyStickControls {
 }
 
 /**
- * [TRIANGLE], [SQUARE], [CIRCLE], [CROSS] are used for pad controllers
+ * [TOP], [BOTTOM], [LEFT], [RIGHT], [CENTER] are used for pad controllers
  */
-enum class PadControls {
+enum class RightPadControls {
     @SerializedName(value = "1")
-    TRIANGLE,
+    TOP,
 
     @SerializedName(value = "2")
-    SQUARE,
+    BOTTOM,
 
     @SerializedName(value = "3")
-    CIRCLE,
+    LEFT,
 
     @SerializedName(value = "4")
-    CROSS,
+    RIGHT,
 
     @SerializedName(value = "5")
-    RELEASE
+    CENTER
+}
+
+enum class LeftPadControls {
+    @SerializedName(value = "1")
+    TOP,
+
+    @SerializedName(value = "2")
+    BOTTOM,
+
+    @SerializedName(value = "3")
+    LEFT,
+
+    @SerializedName(value = "4")
+    RIGHT,
+
+    @SerializedName(value = "5")
+    CENTER
 }
 
 /**

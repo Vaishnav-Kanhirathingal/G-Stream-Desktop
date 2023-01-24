@@ -67,20 +67,15 @@ val controlService = ControlService()
 val streamService = StreamService()
 
 fun getConnectionImagePainter(size: Int = 400): Painter {
-    // TODO: check frame rate cap
-    val screenSize: Dimension = Toolkit.getDefaultToolkit().screenSize
     val data = Gson().toJson(
         ConnectionData(
             serverIpAddress = getAddress() ?: "null",
             videoPort = streamService.screenPort,
             audioPort = streamService.audioPort,
-            movementPort = controlService.movementPort,
-            gamePadPort = controlService.gamePadPort,
-            mouseTrackPort = controlService.mouseTrackPort,
-            shiftPort = controlService.shiftPort,
-            horizontalResolution = screenSize.getWidth().toInt(),
-            verticalResolution = screenSize.getHeight().toInt(),
-            frameRateCap = 60,
+            leftGamePadPort = controlService.leftGamePadPort,
+            leftJoyStickPort = controlService.movementPort,
+            rightGamePadPort = controlService.gamePadPort,
+            rightJoyStickPort = controlService.mouseTrackPort,
         )
     )
     val link = "https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=$data"
