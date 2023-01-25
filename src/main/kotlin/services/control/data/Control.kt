@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName
 import services.control.data.JoyStickControls.*
 import services.control.data.PadControls.*
 
-
 /**
  * [STICK_RIGHT], [STICK_UP], [STICK_LEFT], [STICK_DOWN], [RELEASE] are used for joystick controls.
  * These are common for both the left and right controls.
@@ -27,7 +26,13 @@ enum class JoyStickControls {
 }
 
 /**
- * [TOP], [BOTTOM], [LEFT], [RIGHT], [CENTER] are used for pad controllers
+ * format - left | right pad controls
+ * [TOP] - jump SPACE-BAR | Additional button TAB
+ * [BOTTOM] - crouch or C | Additional button F
+ * [CENTER] - sprinting SHIFT | LMB
+ * [LEFT] - RMB | Q
+ * [RIGHT] - additional button M | E
+ * are used for pad controllers
  */
 enum class PadControls {
     @SerializedName(value = "1")
@@ -36,19 +41,19 @@ enum class PadControls {
     @SerializedName(value = "2")
     BOTTOM,
 
+    @SerializedName(value = "5")
+    CENTER,
+
     @SerializedName(value = "3")
     LEFT,
 
     @SerializedName(value = "4")
-    RIGHT,
-
-    @SerializedName(value = "5")
-    CENTER
+    RIGHT
 }
 
 /**
- * [mouseAngle] is used to specify angle of joystick
- * [mouseStrength] is used to specify how much the joystick was extended
+ * @param mouseAngle is used to specify angle of joystick
+ * @param mouseStrength is used to specify how much the joystick was extended
  */
 data class MouseData(
     @SerializedName(value = "1")

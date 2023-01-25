@@ -20,8 +20,6 @@ import com.google.gson.Gson
 import connection.ConnectionData
 import services.control.ControlService
 import services.stream.StreamService
-import java.awt.Dimension
-import java.awt.Toolkit
 import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.NetworkInterface
