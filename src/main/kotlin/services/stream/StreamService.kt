@@ -36,8 +36,8 @@ class StreamService {
         }
     }
 
-    private val outPutWidth = 1920/3
-    private val outPutHeight = 1080/3
+    private val outPutWidth = 1920 / 2
+    private val outPutHeight = 1080 / 2
 
     private suspend fun initiateVideoStreaming() {
         val outputStream = DataOutputStream(screenSocket.accept().getOutputStream())
