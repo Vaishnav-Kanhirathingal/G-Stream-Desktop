@@ -28,7 +28,7 @@ enum class JoyStickControls {
 /**
  * format - left | right pad controls
  * [TOP] - jump SPACE-BAR | Additional button TAB
- * [BOTTOM] - crouch or C | Additional button F
+ * [BOTTOM] - crouch or C | interact F
  * [CENTER] - sprinting SHIFT | LMB
  * [LEFT] - RMB | Q
  * [RIGHT] - additional button M | E
@@ -56,8 +56,6 @@ enum class PadControls {
  * @param mouseStrength is used to specify how much the joystick was extended
  */
 data class MouseData(
-    @SerializedName(value = "1")
-    var mouseStrength: Int,
-    @SerializedName(value = "2")
-    var mouseAngle: Int,
+    @SerializedName(value = "1") var mouseStrength: Int,
+    @SerializedName(value = "2") var mouseAngle: Int,
 )

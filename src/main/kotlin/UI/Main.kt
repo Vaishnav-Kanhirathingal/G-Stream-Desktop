@@ -1,10 +1,11 @@
+package UI
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -32,37 +33,62 @@ fun main() = application {
         icon = getImageFromUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/blob/main/src/main/resources/app_icon_mipmap/mipmap-hdpi/ic_launcher.png?raw=true"),
         title = "G-Stream",
         onCloseRequest = ::exitApplication,
-        resizable = false
-    ) { App() }
-}
-
-@Composable
-fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
-    MaterialTheme {
-        Column(
-            modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)).horizontalScroll(ScrollState(0)),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = getConnectionImagePainter(),
-                contentDescription = null,
-            )
-            Text(text = "Scan this QRCode from the G-Stream app to initiate streaming from this device.")
-            Text(
-                text = "Instructions:\ngg" +
-                        "\n* Make sure Both the devices (This PC and the Android device) are on the same wifi network." +
-                        "\n* Preferably use a WIFI-6 connection for seamless experience." +
-                        "\n* A reduced load on the router ensures a better connection.",
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Button(onClick = { text = "Hello, Desktop!" }, content = { Text(text) })
-        }
+        resizable = true
+    ) {
+        MaterialTheme { app() }
     }
 }
 
-val controlService = ControlService()
-val streamService = StreamService()
+lateinit var controlService: ControlService
+lateinit var streamService: StreamService
+
+@Composable
+fun app() {
+    var movementServerRunning by remember { mutableStateOf(true) }
+    var gamePadServerRunning by remember { mutableStateOf(true) }
+    var mouseTrackServerRunning by remember { mutableStateOf(true) }
+    var leftGamePadServerRunning by remember { mutableStateOf(true) }
+    controlService = ControlService(
+        movementServerError = { movementServerRunning = false },
+        gamePadServerError = { gamePadServerRunning = false },
+        mouseTrackServerError = { mouseTrackServerRunning = false },
+        leftGamePadServerError = { leftGamePadServerRunning = false },
+    )
+
+    var audioServerRunning by remember { mutableStateOf(true) }
+    var videoServerRunning by remember { mutableStateOf(true) }
+    streamService = StreamService(
+        audioServerError = { audioServerRunning = false },
+        videoServerError = { videoServerRunning = false }
+    )
+
+    Column(
+        modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)).horizontalScroll(ScrollState(0)),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Column(horizontalAlignment = Alignment.Start) {
+            Text("movement server running = $movementServerRunning")
+            Text("gamePad server running = $gamePadServerRunning")
+            Text("mouseTrack server running = $mouseTrackServerRunning")
+            Text("leftGamePad server running = $leftGamePadServerRunning")
+            Text("audio server running = $audioServerRunning")
+            Text("video server running = $videoServerRunning")
+        }
+        Image(
+            painter = getConnectionImagePainter(),
+            contentDescription = null,
+        )
+        Text(text = "Scan this QRCode from the G-Stream app to initiate streaming from this device.")
+        Text(
+            text = "Instructions:\ngg" +
+                    "\n* Make sure Both the devices (This PC and the Android device) are on the same wifi network." +
+                    "\n* Preferably use a WIFI-6 connection for seamless experience." +
+                    "\n* A reduced load on the router ensures a better connection.",
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
 
 fun getConnectionImagePainter(size: Int = 400): Painter {
     val data = Gson().toJson(
@@ -105,12 +131,4 @@ fun getImageFromUrl(link: String): Painter {
         .toComposeImageBitmap()
         .toAwtImage()
         .toPainter()
-}
-
-/**
- * initiates a server at an unused port and returns that port number. This function initiates a streaming port.
- */
-private fun getStreamingPort(): Int {
-    // TODO: open up a port and send back the details
-    return 0
 }

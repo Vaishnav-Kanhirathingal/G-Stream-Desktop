@@ -13,7 +13,13 @@ import java.awt.image.BufferedImage
 import java.io.DataOutputStream
 import java.net.ServerSocket
 
-class StreamService {
+class StreamService(
+    val audioServerError: () -> Unit,
+    val videoServerError: () -> Unit
+) {
+    // TODO: use [audioServerError]
+    // TODO: use [videoServerError]
+
     private val screenSocket = ServerSocket(0)
     private val audioSocket = ServerSocket(0)
 

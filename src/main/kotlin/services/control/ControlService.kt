@@ -10,7 +10,18 @@ import services.control.data.PadControls
 import java.io.DataInputStream
 import java.net.ServerSocket
 
-class ControlService {
+/**
+ * @param movementServerError executed after movement server error
+ * @param gamePadServerError executed after gamePad server error
+ * @param mouseTrackServerError executed after mouseTrack server error
+ * @param leftGamePadServerError executed after leftGamePad server error
+ */
+class ControlService(
+    private val movementServerError: () -> Unit,
+    private val gamePadServerError: () -> Unit,
+    private val mouseTrackServerError: () -> Unit,
+    private val leftGamePadServerError: () -> Unit,
+) {
     private val leftGamePadServer = ServerSocket(0)
     private val movementServer = ServerSocket(0)
     private val gamePadServer = ServerSocket(0)
@@ -32,33 +43,49 @@ class ControlService {
 
     private suspend fun initiateMovementServer() {
         val inputStream = DataInputStream(movementServer.accept().getInputStream())
-        while (true) {
-            val string = inputStream.readUTF()
-            PerformActions.performMovementAction(Gson().fromJson(string, JoyStickControls::class.java))
+        try {
+            while (true) {
+                val string = inputStream.readUTF()
+                PerformActions.performMovementAction(Gson().fromJson(string, JoyStickControls::class.java))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace();movementServerError()
         }
     }
 
     private suspend fun initiateGamePadServer() {
         val inputStream = DataInputStream(gamePadServer.accept().getInputStream())
-        while (true) {
-            val string = inputStream.readUTF()
-            PerformActions.performRightGamePadAction(Gson().fromJson(string, PadControls::class.java))
+        try {
+            while (true) {
+                val string = inputStream.readUTF()
+                PerformActions.performRightGamePadAction(Gson().fromJson(string, PadControls::class.java))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace();gamePadServerError()
         }
     }
 
     private suspend fun initiateMouseTrackServer() {
         val inputStream = DataInputStream(mouseTrackServer.accept().getInputStream())
-        while (true) {
-            val string = inputStream.readUTF()
-            PerformActions.performMouseTrackAction(Gson().fromJson(string, MouseData::class.java))
+        try {
+            while (true) {
+                val string = inputStream.readUTF()
+                PerformActions.performMouseTrackAction(Gson().fromJson(string, MouseData::class.java))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace();mouseTrackServerError()
         }
     }
 
     private suspend fun initiateLeftGamePadServer() {
         val inputStream = DataInputStream(leftGamePadServer.accept().getInputStream())
-        while (true) {
-            val string = inputStream.readUTF()
-            PerformActions.performLeftGamePadAction(Gson().fromJson(string, PadControls::class.java))
+        try {
+            while (true) {
+                val string = inputStream.readUTF()
+                PerformActions.performLeftGamePadAction(Gson().fromJson(string, PadControls::class.java))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace();leftGamePadServerError()
         }
     }
 }
