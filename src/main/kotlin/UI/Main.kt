@@ -2,19 +2,20 @@ package UI
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.graphics.toPainter
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.google.gson.Gson
@@ -33,7 +34,7 @@ fun main() = application {
         icon = getImageFromUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/blob/main/src/main/resources/app_icon_mipmap/mipmap-hdpi/ic_launcher.png?raw=true"),
         title = "G-Stream",
         onCloseRequest = ::exitApplication,
-        resizable = true
+        resizable = true,
     ) {
         MaterialTheme { app() }
     }
@@ -61,19 +62,46 @@ fun app() {
         audioServerError = { audioServerRunning = false },
         videoServerError = { videoServerRunning = false }
     )
+    val statusSize = 6.dp
 
     Column(
-        modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)).horizontalScroll(ScrollState(0)),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column(horizontalAlignment = Alignment.Start) {
-            Text("movement server running = $movementServerRunning")
-            Text("gamePad server running = $gamePadServerRunning")
-            Text("mouseTrack server running = $mouseTrackServerRunning")
-            Text("leftGamePad server running = $leftGamePadServerRunning")
-            Text("audio server running = $audioServerRunning")
-            Text("video server running = $videoServerRunning")
+        Spacer(Modifier.fillMaxWidth().height(20.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+            Image(
+                painter = ColorPainter(if (movementServerRunning) Color.Green else Color.Red),
+                contentDescription = null,
+                modifier = Modifier.width(statusSize).height(statusSize)
+            )
+            Image(
+                painter = ColorPainter(if (gamePadServerRunning) Color.Green else Color.Red),
+                contentDescription = null,
+                modifier = Modifier.width(statusSize).height(statusSize)
+            )
+            Image(
+                painter = ColorPainter(if (mouseTrackServerRunning) Color.Green else Color.Red),
+                contentDescription = null,
+                modifier = Modifier.width(statusSize).height(statusSize)
+            )
+            Image(
+                painter = ColorPainter(if (leftGamePadServerRunning) Color.Green else Color.Red),
+                contentDescription = null,
+                modifier = Modifier.width(statusSize).height(statusSize)
+            )
+            Image(
+                painter = ColorPainter(if (audioServerRunning) Color.Green else Color.Red),
+                contentDescription = null,
+                modifier = Modifier.width(statusSize).height(statusSize)
+            )
+            Image(
+                painter = ColorPainter(if (videoServerRunning) Color.Green else Color.Red),
+                contentDescription = null,
+                modifier = Modifier.width(statusSize).height(statusSize)
+            )
         }
+        Spacer(Modifier.fillMaxWidth().height(20.dp))
         Image(
             painter = getConnectionImagePainter(),
             contentDescription = null,
