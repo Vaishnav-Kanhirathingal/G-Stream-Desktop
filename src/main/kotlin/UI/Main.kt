@@ -45,15 +45,15 @@ lateinit var streamService: StreamService
 
 @Composable
 fun app() {
-    var movementServerRunning by remember { mutableStateOf(true) }
-    var gamePadServerRunning by remember { mutableStateOf(true) }
-    var mouseTrackServerRunning by remember { mutableStateOf(true) }
+    var leftJoystickServerRunning by remember { mutableStateOf(true) }
     var leftGamePadServerRunning by remember { mutableStateOf(true) }
+    var rightGamePadServerRunning by remember { mutableStateOf(true) }
+    var rightJoystickServerRunning by remember { mutableStateOf(true) }
     controlService = ControlService(
-        movementServerError = { movementServerRunning = false },
-        gamePadServerError = { gamePadServerRunning = false },
-        mouseTrackServerError = { mouseTrackServerRunning = false },
+        leftJoystickServerError = { leftJoystickServerRunning = false },
         leftGamePadServerError = { leftGamePadServerRunning = false },
+        rightGamePadServerError = { rightGamePadServerRunning = false },
+        rightJoystickServerError = { rightJoystickServerRunning = false },
     )
 
     var audioServerRunning by remember { mutableStateOf(true) }
@@ -71,22 +71,12 @@ fun app() {
         Spacer(Modifier.fillMaxWidth().height(20.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
             Image(
-                painter = ColorPainter(if (movementServerRunning) Color.Green else Color.Red),
-                contentDescription = null,
-                modifier = Modifier.width(statusSize).height(statusSize)
-            )
-            Image(
-                painter = ColorPainter(if (gamePadServerRunning) Color.Green else Color.Red),
-                contentDescription = null,
-                modifier = Modifier.width(statusSize).height(statusSize)
-            )
-            Image(
-                painter = ColorPainter(if (mouseTrackServerRunning) Color.Green else Color.Red),
-                contentDescription = null,
-                modifier = Modifier.width(statusSize).height(statusSize)
-            )
-            Image(
                 painter = ColorPainter(if (leftGamePadServerRunning) Color.Green else Color.Red),
+                contentDescription = null,
+                modifier = Modifier.width(statusSize).height(statusSize)
+            )
+            Image(
+                painter = ColorPainter(if (leftJoystickServerRunning) Color.Green else Color.Red),
                 contentDescription = null,
                 modifier = Modifier.width(statusSize).height(statusSize)
             )
@@ -97,6 +87,16 @@ fun app() {
             )
             Image(
                 painter = ColorPainter(if (videoServerRunning) Color.Green else Color.Red),
+                contentDescription = null,
+                modifier = Modifier.width(statusSize).height(statusSize)
+            )
+            Image(
+                painter = ColorPainter(if (rightJoystickServerRunning) Color.Green else Color.Red),
+                contentDescription = null,
+                modifier = Modifier.width(statusSize).height(statusSize)
+            )
+            Image(
+                painter = ColorPainter(if (rightGamePadServerRunning) Color.Green else Color.Red),
                 contentDescription = null,
                 modifier = Modifier.width(statusSize).height(statusSize)
             )
@@ -125,9 +125,9 @@ fun getConnectionImagePainter(size: Int = 400): Painter {
             videoPort = streamService.screenPort,
             audioPort = streamService.audioPort,
             leftGamePadPort = controlService.leftGamePadPort,
-            leftJoyStickPort = controlService.movementPort,
-            rightGamePadPort = controlService.gamePadPort,
-            rightJoyStickPort = controlService.mouseTrackPort,
+            leftJoyStickPort = controlService.leftJoystickPort,
+            rightGamePadPort = controlService.rightGamePadPort,
+            rightJoyStickPort = controlService.rightJoystickPort,
         )
     )
     val link = "https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=$data"
