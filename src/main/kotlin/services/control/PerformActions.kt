@@ -8,8 +8,6 @@ import java.awt.MouseInfo
 import java.awt.Robot
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
-import kotlin.math.cos
-import kotlin.math.sin
 
 object PerformActions {
     private val robot = Robot()
@@ -51,21 +49,13 @@ object PerformActions {
     /**
      * this includes the mouse movement using strength and angle as input.
      */
-    fun performMouseTrackAction(mouseData: MouseData) {
-        val angle = Math.toRadians(mouseData.mouseAngle.toDouble())
-        val strength = mouseData.mouseStrength.toDouble() * 0.4
-        animateToPosition(
-            dx = (cos(angle) * strength).toInt(), dy = (-sin(angle) * strength).toInt()
-        )
-    }
-
-    private fun animateToPosition(dx: Int, dy: Int, frames: Int = 2) {
+    fun performMouseTrackAction(mouseData: MouseData, frames: Int = 2) {
         val x = MouseInfo.getPointerInfo().location.x
         val y = MouseInfo.getPointerInfo().location.y
         repeat(frames) {
             val i = it + 1
             Thread.sleep(6)
-            robot.mouseMove((x + ((dx * i) / frames)), (y + ((dy * i) / frames)))
+            robot.mouseMove((x + ((mouseData.mouseMovementX * i) / frames)), (y + ((-mouseData.mouseMovementY * i) / frames)))
         }
     }
 
