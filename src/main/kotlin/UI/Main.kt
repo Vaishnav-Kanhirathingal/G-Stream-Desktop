@@ -1,7 +1,9 @@
 package UI
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -15,6 +17,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.graphics.toPainter
+import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -43,6 +48,8 @@ fun main() = application {
 lateinit var controlService: ControlService
 lateinit var streamService: StreamService
 
+@Preview
+@OptIn(ExperimentalUnitApi::class)
 @Composable
 fun app() {
     var leftJoystickServerRunning by remember { mutableStateOf(true) }
@@ -58,18 +65,26 @@ fun app() {
 
     var audioServerRunning by remember { mutableStateOf(true) }
     var videoServerRunning by remember { mutableStateOf(true) }
-    streamService = StreamService(
-        audioServerError = { audioServerRunning = false },
-        videoServerError = { videoServerRunning = false }
-    )
+    streamService = StreamService(audioServerError = { audioServerRunning = false },
+        videoServerError = { videoServerRunning = false })
     val statusSize = 6.dp
 
     Column(
-        modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)),
+        modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)).padding(horizontal = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(Modifier.fillMaxWidth().height(20.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+        Text(
+            text = "below dots represent different server states. 'red' means that server has crashed and you might want to restart the service to get it back online and, green means the server is active",
+            fontSize = TextUnit(
+                value = 16f, type = TextUnitType.Sp
+            )
+        )
+        Spacer(Modifier.fillMaxWidth().height(20.dp))
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            modifier = Modifier.border(width = 1.dp, color = Color.Red)
+        ) {
             Image(
                 painter = ColorPainter(if (leftGamePadServerRunning) Color.Green else Color.Red),
                 contentDescription = null,
@@ -102,16 +117,10 @@ fun app() {
             )
         }
         Spacer(Modifier.fillMaxWidth().height(20.dp))
-        Image(
-            painter = getConnectionImagePainter(),
-            contentDescription = null,
-        )
+        Image(painter = getConnectionImagePainter(), contentDescription = null)
         Text(text = "Scan this QRCode from the G-Stream app to initiate streaming from this device.")
         Text(
-            text = "Instructions:\ngg" +
-                    "\n* Make sure Both the devices (This PC and the Android device) are on the same wifi network." +
-                    "\n* Preferably use a WIFI-6 connection for seamless experience." +
-                    "\n* A reduced load on the router ensures a better connection.",
+            text = "Instructions:\ngg" + "\n* Make sure Both the devices (This PC and the Android device) are on the same wifi network." + "\n* Preferably use a WIFI-6 connection for seamless experience." + "\n* A reduced load on the router ensures a better connection.",
             modifier = Modifier.fillMaxWidth(),
         )
     }
@@ -141,8 +150,7 @@ fun getAddress(): String? {
         if (listOfAddresses.isNotEmpty() && isWlan) {
             for (inetAddress in listOfAddresses) {
                 println("\n\nDisplay name:\t${netInterface.displayName}\nName:\t\t\t${netInterface.name}\nInetAddress:\t${inetAddress.hostAddress}")
-                if (inetAddress.hostAddress.startsWith("192.168"))
-                    return inetAddress.hostAddress
+                if (inetAddress.hostAddress.startsWith("192.168")) return inetAddress.hostAddress
             }
         }
     }
@@ -154,9 +162,6 @@ fun getImageFromUrl(link: String): Painter {
     connection.connect()
     val stream = ByteArrayOutputStream()
     ImageIO.write(ImageIO.read(connection.inputStream), "png", stream)
-    return org.jetbrains.skia.Image
-        .makeFromEncoded(stream.toByteArray())
-        .toComposeImageBitmap()
-        .toAwtImage()
+    return org.jetbrains.skia.Image.makeFromEncoded(stream.toByteArray()).toComposeImageBitmap().toAwtImage()
         .toPainter()
 }
