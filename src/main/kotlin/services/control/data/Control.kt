@@ -5,8 +5,16 @@ import services.control.data.JoyStickControls.*
 import services.control.data.PadControls.*
 
 /**
- * [STICK_RIGHT], [STICK_UP], [STICK_LEFT], [STICK_DOWN], [RELEASE] are used for joystick controls.
- * These are common for both the left and right controls.
+ * [STICK_RIGHT] - move RIGHT
+ * [STICK_UP] - move UP
+ * [STICK_LEFT] - move LEFT
+ * [STICK_DOWN] - move DOWN
+ * [RELEASE] - release button
+ * [STICK_UP_RIGHT] - move UP RIGHT
+ * [STICK_UP_LEFT] - move UP LEFT
+ * [STICK_DOWN_RIGHT] - move DOWN RIGHT
+ * [STICK_DOWN_LEFT] - move DOWN LEFT
+ * are used for joystick controls.
  */
 enum class JoyStickControls {
     @SerializedName(value = "1")
@@ -22,7 +30,19 @@ enum class JoyStickControls {
     STICK_DOWN,
 
     @SerializedName(value = "5")
-    RELEASE
+    RELEASE,
+
+    @SerializedName(value = "6")
+    STICK_UP_RIGHT,
+
+    @SerializedName(value = "7")
+    STICK_UP_LEFT,
+
+    @SerializedName(value = "8")
+    STICK_DOWN_RIGHT,
+
+    @SerializedName(value = "9")
+    STICK_DOWN_LEFT,
 }
 
 /**

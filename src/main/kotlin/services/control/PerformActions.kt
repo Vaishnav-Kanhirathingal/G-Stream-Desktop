@@ -11,32 +11,31 @@ import java.awt.event.KeyEvent
 
 object PerformActions {
     private val robot = Robot()
-    private var previousLeftJoystickAction: Int? = null
+    private var previousLeftJoystickAction: MutableList<Int> = mutableListOf()
 
     /**
      * Takes the responsibility of handling the actions of the left joystick. This includes the character movement
      * controls.
      */
     fun performMovementAction(joyStickControls: JoyStickControls) {
-        val currentKey = if (false) {
-            when (joyStickControls) {
-                STICK_UP -> KeyEvent.VK_UP
-                STICK_LEFT -> KeyEvent.VK_LEFT
-                STICK_DOWN -> KeyEvent.VK_DOWN
-                STICK_RIGHT -> KeyEvent.VK_RIGHT
-                RELEASE -> null
-            }
-        } else {
-            when (joyStickControls) {
-                STICK_UP -> KeyEvent.VK_W
-                STICK_LEFT -> KeyEvent.VK_A
-                STICK_DOWN -> KeyEvent.VK_S
-                STICK_RIGHT -> KeyEvent.VK_D
-                RELEASE -> null
-            }
+        val currentKey: MutableList<Int> = when (joyStickControls) {
+            STICK_UP -> mutableListOf(KeyEvent.VK_W)
+            STICK_LEFT -> mutableListOf(KeyEvent.VK_A)
+            STICK_DOWN -> mutableListOf(KeyEvent.VK_S)
+            STICK_RIGHT -> mutableListOf(KeyEvent.VK_D)
+            STICK_UP_RIGHT -> mutableListOf(KeyEvent.VK_W, KeyEvent.VK_D)
+            STICK_UP_LEFT -> mutableListOf(KeyEvent.VK_W, KeyEvent.VK_A)
+            STICK_DOWN_RIGHT -> mutableListOf(KeyEvent.VK_S, KeyEvent.VK_D)
+            STICK_DOWN_LEFT -> mutableListOf(KeyEvent.VK_S, KeyEvent.VK_A)
+            RELEASE -> mutableListOf()
         }
-        previousLeftJoystickAction?.let { robot.keyRelease(it) }
-        currentKey?.let { robot.keyPress(it) }
+        for (i in previousLeftJoystickAction) {
+            robot.keyRelease(i)
+        }
+
+        for (i in currentKey) {
+            robot.keyPress(i)
+        }
 
         // this signifies a movement direction change. Hence, the shift key should be released if pressed
         if (previousLeftJoystickAction != currentKey && pressed) {
@@ -55,7 +54,9 @@ object PerformActions {
         repeat(frames) {
             val i = it + 1
             Thread.sleep(6)
-            robot.mouseMove((x + ((mouseData.mouseMovementX * i) / frames)), (y + ((-mouseData.mouseMovementY * i) / frames)))
+            robot.mouseMove(
+                (x + ((mouseData.mouseMovementX * i) / frames)), (y + ((-mouseData.mouseMovementY * i) / frames))
+            )
         }
     }
 
