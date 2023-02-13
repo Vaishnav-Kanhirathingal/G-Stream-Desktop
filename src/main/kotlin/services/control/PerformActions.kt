@@ -49,6 +49,7 @@ object PerformActions {
      * this includes the mouse movement using strength and angle as input.
      */
     fun performMouseTrackAction(mouseData: MouseData, frames: Int = 2) {
+        // TODO: to be replaced by a c function using JNI
         val x = MouseInfo.getPointerInfo().location.x
         val y = MouseInfo.getPointerInfo().location.y
         repeat(frames) {
@@ -89,12 +90,11 @@ object PerformActions {
      * handles long key presses for shift
      */
     private fun performShiftAction() {
-        pressed = if (pressed) {
+        if (pressed) {
             robot.keyRelease(KeyEvent.VK_SHIFT)
-            false
         } else {
             robot.keyPress(KeyEvent.VK_SHIFT)
-            true
         }
+        pressed = !pressed
     }
 }
