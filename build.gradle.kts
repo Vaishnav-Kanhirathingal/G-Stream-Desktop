@@ -23,20 +23,9 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10")
     implementation("io.socket:socket.io-server:4.0.1")// TODO: use for low latency
 
-    val lwjglVersion = "3.3.1"
-    val lwjglNatives = "natives-windows"
-    implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
+    implementation("net.java.dev.jna:jna:5.5.0")
+    implementation("net.java.dev.jna:jna-platform:5.5.0")
 
-    implementation("org.lwjgl:lwjgl")
-    implementation("org.lwjgl:lwjgl-glfw")
-    implementation("org.lwjgl:lwjgl-jawt")
-    implementation("org.lwjgl:lwjgl-nfd")
-    implementation("org.lwjgl:lwjgl-tinyfd")
-
-    runtimeOnly("org.lwjgl:lwjgl::$lwjglNatives")
-    runtimeOnly("org.lwjgl:lwjgl-glfw::$lwjglNatives")
-    runtimeOnly("org.lwjgl:lwjgl-nfd::$lwjglNatives")
-    runtimeOnly("org.lwjgl:lwjgl-tinyfd::$lwjglNatives")
 }
 
 tasks.withType<KotlinCompile> {
