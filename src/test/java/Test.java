@@ -8,10 +8,14 @@ import static com.sun.jna.platform.win32.WinUser.INPUT.INPUT_MOUSE;
 public class Test {
 
     public static void main(String[] a) {
-        moveMouse(
-                10L,
-                10L
-        );
+        for (int i = 0; i < 100; i++) {
+            moveMouse(10L, 10L);
+            try {
+                Thread.sleep(20);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -26,12 +30,7 @@ public class Test {
         input.input.mi.dy = new LONG(y);
         input.input.mi.time = new DWORD(0);
         input.input.mi.dwFlags = new DWORD(0x0001L);
-
         INPUT[] inputArray = {input};
-
         DWORD result = User32.INSTANCE.SendInput(new DWORD(1), inputArray, input.size());
-
-//        System.out.println("result = " + result.longValue());
-//        System.out.println("size = " + input.size());
     }
 }
