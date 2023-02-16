@@ -1,10 +1,12 @@
 package services.control
 
+import com.sun.jna.platform.win32.User32
+import com.sun.jna.platform.win32.WinDef
+import com.sun.jna.platform.win32.WinUser.INPUT
 import services.control.data.JoyStickControls
 import services.control.data.JoyStickControls.*
 import services.control.data.MouseData
 import services.control.data.PadControls
-import java.awt.MouseInfo
 import java.awt.Robot
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
@@ -48,16 +50,21 @@ object PerformActions {
     /**
      * this includes the mouse movement using strength and angle as input.
      */
-    fun performMouseTrackAction(mouseData: MouseData, frames: Int = 2) {
+    fun performMouseTrackAction(mouseData: MouseData, frames: Int = 4) {
         // TODO: to be replaced by a c function using JNI
-        val x = MouseInfo.getPointerInfo().location.x
-        val y = MouseInfo.getPointerInfo().location.y
         repeat(frames) {
             val i = it + 1
             Thread.sleep(6)
-            robot.mouseMove(
-                (x + ((mouseData.mouseMovementX * i) / frames)), (y + ((-mouseData.mouseMovementY * i) / frames))
-            )
+            val input = INPUT()
+            input.type = WinDef.DWORD(INPUT.INPUT_MOUSE.toLong())
+            input.input.setType("mi")
+            input.input.mi.apply {
+                dx = WinDef.LONG(((mouseData.mouseMovementX * i) / frames).toLong())
+                dy = WinDef.LONG(((mouseData.mouseMovementY * -i) / frames).toLong())
+                time = WinDef.DWORD(0)
+                dwFlags = WinDef.DWORD(0x0001L)
+            }
+            User32.INSTANCE.SendInput(WinDef.DWORD(1L), arrayOf(input), input.size())
         }
     }
 
