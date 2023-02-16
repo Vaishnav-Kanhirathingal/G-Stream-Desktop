@@ -9,3 +9,23 @@ fun main() {
         PerformActions.performMouseTrackAction(MouseData(mouseMovementX = 10, mouseMovementY = 10))
     }
 }
+
+
+class NewTest {
+    private var arr = mutableListOf<Int>()
+    private var index = 0
+
+    fun peek(): Int {
+        return arr[index]
+    }
+
+    fun push(element: Int) {
+        arr.add(element)
+        index++
+    }
+
+    fun pop() {
+        arr.removeAt(index)
+        index--
+    }
+}
