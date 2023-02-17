@@ -8,6 +8,7 @@ import services.control.data.JoyStickControls
 import services.control.data.MouseData
 import services.control.data.PadControls
 import java.io.DataInputStream
+import java.net.DatagramSocket
 import java.net.ServerSocket
 
 /**
@@ -24,7 +25,7 @@ class ControlService(
 ) {
     private val leftJoystickServer = ServerSocket(0)
     private val leftGamePadServer = ServerSocket(0)
-    private val rightJoystickServer = ServerSocket(0)
+    private val rightJoystickServer = ServerSocket(0)// TODO: replace with datagram socket
     private val rightGamePadServer = ServerSocket(0)
 
     val leftJoystickPort get() = leftJoystickServer.localPort

@@ -15,6 +15,16 @@ object PerformActions {
     private val robot = Robot()
     private var previousLeftJoystickAction: MutableList<Int> = mutableListOf()
 
+
+    private val input = INPUT()
+
+    init {
+        input.type = WinDef.DWORD(INPUT.INPUT_MOUSE.toLong())
+        input.input.setType("mi")
+        input.input.mi.dwFlags = WinDef.DWORD(0x0001L)
+        input.input.mi.time = WinDef.DWORD(0)
+    }
+
     /**
      * Takes the responsibility of handling the actions of the left joystick. This includes the character movement
      * controls.
@@ -31,13 +41,9 @@ object PerformActions {
             STICK_DOWN_LEFT -> mutableListOf(KeyEvent.VK_S, KeyEvent.VK_A)
             RELEASE -> mutableListOf()
         }
-        for (i in previousLeftJoystickAction) {
-            robot.keyRelease(i)
-        }
+        for (i in previousLeftJoystickAction) robot.keyRelease(i)
+        for (i in currentKey) robot.keyPress(i)
 
-        for (i in currentKey) {
-            robot.keyPress(i)
-        }
 
         // this signifies a movement direction change. Hence, the shift key should be released if pressed
         if (previousLeftJoystickAction != currentKey && pressed) {
@@ -50,19 +56,14 @@ object PerformActions {
     /**
      * this includes the mouse movement using strength and angle as input.
      */
-    fun performMouseTrackAction(mouseData: MouseData, frames: Int = 4) {
+    fun performMouseTrackAction(mouseData: MouseData, frames: Int = 3) {
         // TODO: to be replaced by a c function using JNI
         repeat(frames) {
             val i = it + 1
-            Thread.sleep(6)
-            val input = INPUT()
-            input.type = WinDef.DWORD(INPUT.INPUT_MOUSE.toLong())
-            input.input.setType("mi")
+            Thread.sleep(4)
             input.input.mi.apply {
                 dx = WinDef.LONG(((mouseData.mouseMovementX * i) / frames).toLong())
                 dy = WinDef.LONG(((mouseData.mouseMovementY * -i) / frames).toLong())
-                time = WinDef.DWORD(0)
-                dwFlags = WinDef.DWORD(0x0001L)
             }
             User32.INSTANCE.SendInput(WinDef.DWORD(1L), arrayOf(input), input.size())
         }
