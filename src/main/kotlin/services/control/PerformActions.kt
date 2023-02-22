@@ -3,6 +3,9 @@ package services.control
 import com.sun.jna.platform.win32.User32
 import com.sun.jna.platform.win32.WinDef
 import com.sun.jna.platform.win32.WinUser.INPUT
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import services.control.data.JoyStickControls
 import services.control.data.JoyStickControls.*
 import services.control.data.MouseData
@@ -23,6 +26,7 @@ object PerformActions {
         input.input.setType("mi")
         input.input.mi.dwFlags = WinDef.DWORD(0x0001L)
         input.input.mi.time = WinDef.DWORD(0)
+        initiateTest()
     }
 
     /**
@@ -56,16 +60,31 @@ object PerformActions {
     /**
      * this includes the mouse movement using strength and angle as input.
      */
-    fun performMouseTrackAction(mouseData: MouseData, frames: Int = 3) {
-        // TODO: to be replaced by a c function using JNI
+    fun performMouseTrackAction(mouseData: MouseData, frames: Int = 2) {
+        counter++
         repeat(frames) {
             val i = it + 1
-            Thread.sleep(4)
+            Thread.sleep(2)
             input.input.mi.apply {
                 dx = WinDef.LONG(((mouseData.mouseMovementX * i) / frames).toLong())
-                dy = WinDef.LONG(((mouseData.mouseMovementY * -i) / frames).toLong())
+                dy = WinDef.LONG(((mouseData.mouseMovementY * i) / frames).toLong())
             }
             User32.INSTANCE.SendInput(WinDef.DWORD(1L), arrayOf(input), input.size())
+        }
+
+//        input.input.mi.dx = WinDef.LONG(mouseData.mouseMovementX.toLong())
+//        input.input.mi.dy = WinDef.LONG(mouseData.mouseMovementY.toLong())
+//        User32.INSTANCE.SendInput(WinDef.DWORD(1L), arrayOf(input), input.size())
+    }
+
+    private var counter = 0
+    private fun initiateTest() {
+        CoroutineScope(Dispatchers.IO).launch {
+            while (true) {
+                Thread.sleep(1000)
+                println("counter = $counter")
+                counter = 0
+            }
         }
     }
 
