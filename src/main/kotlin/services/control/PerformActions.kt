@@ -48,12 +48,9 @@ object PerformActions {
         for (i in previousLeftJoystickAction) robot.keyRelease(i)
         for (i in currentKey) robot.keyPress(i)
 
-
         // this signifies a movement direction change. Hence, the shift key should be released if pressed
-        if (previousLeftJoystickAction != currentKey && pressed) {
-            robot.keyRelease(KeyEvent.VK_SHIFT)
-            pressed = false
-        }
+        if (previousLeftJoystickAction != currentKey && pressed) performShiftAction()
+
         previousLeftJoystickAction = currentKey
     }
 

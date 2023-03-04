@@ -21,7 +21,6 @@ repositories {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.google.code.gson:gson:2.10")
-    implementation("io.socket:socket.io-server:4.0.1")// TODO: use for low latency
 
     implementation("net.java.dev.jna:jna:5.5.0")
     implementation("net.java.dev.jna:jna-platform:5.5.0")

@@ -16,8 +16,6 @@ class StreamService(
     val audioServerError: () -> Unit,
     val videoServerError: () -> Unit
 ) {
-    // TODO: use [audioServerError]
-    // TODO: use [videoServerError]
 
     private val screenSocket = ServerSocket(0)
     private val audioSocket = ServerSocket(0)
@@ -80,14 +78,19 @@ class StreamService(
 
     private suspend fun initiateAudioStreaming() {
         val outputStream = DataOutputStream(audioSocket.accept().getOutputStream())
-        while (true) {
-            Thread.sleep(1000)
-            val str = "random str ${Random(100).nextInt()}"
-            println(str)
-            outputStream.apply {
-                writeUTF(str)
-                flush()
+        try {
+            while (true) {
+                Thread.sleep(1000)
+                val str = "random str ${Random(100).nextInt()}"
+                println(str)
+                outputStream.apply {
+                    writeUTF(str)
+                    flush()
+                }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            audioServerError()
         }
     }
 }
