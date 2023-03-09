@@ -82,11 +82,14 @@ object PerformActions {
 
     fun performLeftGamePadAction(padControls: PadControls) {
         when (padControls) {
-            PadControls.TOP -> robot.apply { keyPress(KeyEvent.VK_SPACE);keyRelease(KeyEvent.VK_SPACE) }
-            PadControls.BOTTOM -> robot.apply { keyPress(KeyEvent.VK_C);keyRelease(KeyEvent.VK_C) }
-            PadControls.CENTER -> robot.apply { performShiftAction() }
-            PadControls.LEFT -> robot.apply { mousePress(KeyEvent.BUTTON3_DOWN_MASK);mouseRelease(KeyEvent.BUTTON3_DOWN_MASK) }
-            PadControls.RIGHT -> robot.apply { keyPress(KeyEvent.VK_M);keyRelease(KeyEvent.VK_M) }
+            PadControls.TOP_PRESSED -> robot.apply { keyPress(KeyEvent.VK_SPACE);keyRelease(KeyEvent.VK_SPACE) }
+            PadControls.BOTTOM_PRESSED -> robot.apply { keyPress(KeyEvent.VK_C);keyRelease(KeyEvent.VK_C) }
+            PadControls.CENTER_PRESSED -> robot.apply { performShiftAction() }
+
+            PadControls.LEFT_PRESSED -> robot.apply { mousePress(KeyEvent.BUTTON3_DOWN_MASK) }
+            PadControls.LEFT_RELEASED -> robot.apply { mouseRelease(KeyEvent.BUTTON3_DOWN_MASK) }
+
+            PadControls.RIGHT_PRESSED -> robot.apply { keyPress(KeyEvent.VK_M);keyRelease(KeyEvent.VK_M) }
         }
     }
 
@@ -95,11 +98,14 @@ object PerformActions {
      */
     fun performRightGamePadAction(padControls: PadControls) {
         when (padControls) {
-            PadControls.TOP -> robot.apply { keyPress(KeyEvent.VK_TAB);keyRelease(KeyEvent.VK_TAB) }
-            PadControls.BOTTOM -> robot.apply { keyPress(KeyEvent.VK_F);keyRelease(KeyEvent.VK_F) }
-            PadControls.CENTER -> robot.apply { mousePress(InputEvent.BUTTON1_DOWN_MASK);mouseRelease(InputEvent.BUTTON1_DOWN_MASK) }
-            PadControls.LEFT -> robot.apply { keyPress(KeyEvent.VK_Q);keyRelease(KeyEvent.VK_Q) }
-            PadControls.RIGHT -> robot.apply { keyPress(KeyEvent.VK_E);keyRelease(KeyEvent.VK_E) }
+            PadControls.TOP_PRESSED -> robot.apply { keyPress(KeyEvent.VK_TAB);keyRelease(KeyEvent.VK_TAB) }
+            PadControls.BOTTOM_PRESSED -> robot.apply { keyPress(KeyEvent.VK_F);keyRelease(KeyEvent.VK_F) }
+
+            PadControls.CENTER_PRESSED -> robot.apply { mousePress(InputEvent.BUTTON1_DOWN_MASK) }
+            PadControls.CENTER_RELEASED -> robot.apply { mouseRelease(InputEvent.BUTTON1_DOWN_MASK) }
+
+            PadControls.LEFT_PRESSED -> robot.apply { keyPress(KeyEvent.VK_Q);keyRelease(KeyEvent.VK_Q) }
+            PadControls.RIGHT_PRESSED -> robot.apply { keyPress(KeyEvent.VK_E);keyRelease(KeyEvent.VK_E) }
         }
     }
 
