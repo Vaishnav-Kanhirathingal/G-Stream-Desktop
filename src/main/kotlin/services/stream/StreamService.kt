@@ -39,36 +39,28 @@ class StreamService(
         }
     }
 
-    private val outPutWidth = 1920 / 3
-    private val outPutHeight = 1080 / 3
+    private val ratio = 3
+    private val inputWidth = 1920
+    private val inputHeight = 1080
 
     private suspend fun initiateVideoStreaming() {
         val outputStream = DataOutputStream(screenSocket.accept().getOutputStream())
         val robot = Robot()
         try {
             while (true) {
-
-                //---------------------------------------------------------------------------------------------------------||
-                val fullScaleImage = robot.createScreenCapture(Rectangle(1920, 1080))
-
-                //---------------------------------------------------------------------------------------------------------25Max
-                val bufferedImage = BufferedImage(outPutWidth, outPutHeight, BufferedImage.TYPE_INT_RGB)
+                val fullScaleImage = robot.createScreenCapture(Rectangle(inputWidth, inputHeight))
+                val bufferedImage = BufferedImage(inputWidth / ratio, inputHeight / ratio, BufferedImage.TYPE_INT_RGB)
                 val graphics = bufferedImage.createGraphics()
-                graphics.drawImage(fullScaleImage, 0, 0, outPutWidth, outPutHeight, null)
+                graphics.drawImage(fullScaleImage, 0, 0, inputWidth / ratio, inputHeight / ratio, null)
                 graphics.dispose()
-
                 val data = bufferedImage.toImage().encodeToData(EncodedImageFormat.JPEG, 60)
                 val jpegByteArray = data?.bytes!!
-
-                //---------------------------------------------------------------------------------------------------------||
                 outputStream.apply {
                     frames++
                     writeInt(jpegByteArray.size)
                     write(jpegByteArray)
                     flush()
                 }
-                // TODO: capture a few consecutive frames with a specified interval combine the captured frames into a
-                //  packet using lossy compression send those frames to the mobile device
             }
         } catch (e: Exception) {
             videoServerError()
