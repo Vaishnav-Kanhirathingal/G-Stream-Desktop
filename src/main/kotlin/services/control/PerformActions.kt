@@ -69,6 +69,22 @@ object PerformActions {
         }
     }
 
+    /**
+     * this includes the mouse movement using strength and angle as input.
+     */
+    fun performMouseTrackAction(mouseData: MutableList<MouseData>) {
+        counter++
+        for (i in mouseData) {
+            println("${i.mouseMovementX}, ${i.mouseMovementY} \t\t-${mouseData.size}")
+//            Thread.sleep(2)
+            input.input.mi.apply {
+                dx = WinDef.LONG((i.mouseMovementX).toLong())
+                dy = WinDef.LONG((i.mouseMovementY).toLong())
+            }
+            User32.INSTANCE.SendInput(WinDef.DWORD(1L), arrayOf(input), input.size())
+        }
+    }
+
     private var counter = 0
     private fun initiateTest() {
         CoroutineScope(Dispatchers.IO).launch {

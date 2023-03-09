@@ -8,7 +8,6 @@ import services.control.data.JoyStickControls
 import services.control.data.MouseData
 import services.control.data.PadControls
 import java.io.DataInputStream
-import java.net.DatagramSocket
 import java.net.ServerSocket
 
 /**
@@ -71,7 +70,12 @@ class ControlService(
         try {
             while (true) {
                 val string = inputStream.readUTF()
-                PerformActions.performMouseTrackAction(Gson().fromJson(string, MouseData::class.java))
+                val temp = Gson().fromJson(string, mutableListOf<String>()::class.java)
+                val tempMouse = mutableListOf<MouseData>()
+                for (i in temp) {
+                    tempMouse.add(Gson().fromJson(i, MouseData::class.java))
+                }
+                PerformActions.performMouseTrackAction(tempMouse)
             }
         } catch (e: Exception) {
             e.printStackTrace();rightJoystickServerError()
