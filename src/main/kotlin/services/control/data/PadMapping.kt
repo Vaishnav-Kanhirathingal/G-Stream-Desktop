@@ -19,21 +19,21 @@ data class PadMapping(
         //sample mapping object
         val deathStranding = PadMapping(
             leftPadBottom = VK_C,
-            leftPadRight = VK_M,
+            leftPadRight = VK_TAB,
 
-            rightPadTop = VK_TAB,
-            rightPadBottom = VK_F,
+            rightPadTop = VK_F,
+            rightPadBottom = VK_ALT,
             rightPadLeft = VK_Q,
             rightPadRight = VK_E,
         )
         val control = PadMapping(
-            leftPadBottom = 0,
-            leftPadRight = 0,
+            leftPadBottom = VK_C,
+            leftPadRight = VK_TAB,
 
-            rightPadTop = 0,
-            rightPadBottom = 0,
-            rightPadLeft = 0,
-            rightPadRight = 0,
+            rightPadTop = VK_F,
+            rightPadBottom = VK_CONTROL,
+            rightPadLeft = VK_Q,
+            rightPadRight = VK_E,
         )
     }
 }
