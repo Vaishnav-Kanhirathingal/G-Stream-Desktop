@@ -1,27 +1,39 @@
 package services.control.data
 
-class PadMapping(
-    val leftPadLeft: Int,
-    val leftPadRight: Int,
-    val leftPadTop: Int,
-    val leftPadBottom: Int,
+import java.awt.event.KeyEvent.*
 
-    val rightPadLeft: Int,
-    val rightPadRight: Int,
+data class PadMapping(
+    val leftPadTop: Int= VK_SPACE,
+    val leftPadBottom: Int,
+    val leftPadCenter: Int= VK_SHIFT,
+    val leftPadLeft: Int = BUTTON3_DOWN_MASK,
+    val leftPadRight: Int,
+
     val rightPadTop: Int,
     val rightPadBottom: Int,
+    val rightPadCenter: Int = BUTTON1_DOWN_MASK,
+    val rightPadLeft: Int,
+    val rightPadRight: Int,
 ) {
     companion object {
         //sample mapping object
         val deathStranding = PadMapping(
-            leftPadLeft = 0,
-            leftPadRight = 0,
-            leftPadTop = 0,
+            leftPadBottom = VK_C,
+            leftPadRight = VK_M,
+
+            rightPadTop = VK_TAB,
+            rightPadBottom = VK_F,
+            rightPadLeft = VK_Q,
+            rightPadRight = VK_E,
+        )
+        val control = PadMapping(
             leftPadBottom = 0,
+            leftPadRight = 0,
+
+            rightPadTop = 0,
+            rightPadBottom = 0,
             rightPadLeft = 0,
             rightPadRight = 0,
-            rightPadTop = 0,
-            rightPadBottom = 0
         )
     }
 }
