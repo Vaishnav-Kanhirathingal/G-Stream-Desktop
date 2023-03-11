@@ -10,14 +10,14 @@ import services.control.data.JoyStickControls
 import services.control.data.JoyStickControls.*
 import services.control.data.MouseData
 import services.control.data.PadControls
+import services.control.data.PadMapping
 import java.awt.Robot
-import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 
 object PerformActions {
     private val robot = Robot()
     private var previousLeftJoystickAction: MutableList<Int> = mutableListOf()
-
+    private val game = PadMapping.deathStranding
 
     private val input = INPUT()
 
@@ -47,9 +47,6 @@ object PerformActions {
         }
         for (i in previousLeftJoystickAction) robot.keyRelease(i)
         for (i in currentKey) robot.keyPress(i)
-
-        // this signifies a movement direction change. Hence, the shift key should be released if pressed
-        if (previousLeftJoystickAction != currentKey && pressed) performShiftAction()
 
         previousLeftJoystickAction = currentKey
     }
@@ -98,14 +95,20 @@ object PerformActions {
 
     fun performLeftGamePadAction(padControls: PadControls) {
         when (padControls) {
-            PadControls.TOP_PRESSED -> robot.apply { keyPress(KeyEvent.VK_SPACE);keyRelease(KeyEvent.VK_SPACE) }
-            PadControls.BOTTOM_PRESSED -> robot.apply { keyPress(KeyEvent.VK_C);keyRelease(KeyEvent.VK_C) }
-            PadControls.CENTER_PRESSED -> robot.apply { performShiftAction() }
+            PadControls.TOP_PRESSED -> robot.keyPress(game.leftPadTop)
+            PadControls.TOP_RELEASED -> robot.keyRelease(game.leftPadTop)
 
-            PadControls.LEFT_PRESSED -> robot.apply { mousePress(KeyEvent.BUTTON3_DOWN_MASK) }
-            PadControls.LEFT_RELEASED -> robot.apply { mouseRelease(KeyEvent.BUTTON3_DOWN_MASK) }
+            PadControls.BOTTOM_PRESSED -> robot.keyPress(game.leftPadBottom)
+            PadControls.BOTTOM_RELEASED -> robot.keyRelease(game.leftPadBottom)
 
-            PadControls.RIGHT_PRESSED -> robot.apply { keyPress(KeyEvent.VK_M);keyRelease(KeyEvent.VK_M) }
+            PadControls.CENTER_PRESSED -> robot.keyPress(game.leftPadCenter)
+            PadControls.CENTER_RELEASED -> robot.keyRelease(game.leftPadCenter)
+
+            PadControls.LEFT_PRESSED -> robot.mousePress(game.leftPadLeft)
+            PadControls.LEFT_RELEASED -> robot.mouseRelease(game.leftPadLeft)
+
+            PadControls.RIGHT_PRESSED -> robot.keyPress(game.leftPadRight)
+            PadControls.RIGHT_RELEASED -> robot.keyRelease(game.leftPadRight)
         }
     }
 
@@ -114,28 +117,20 @@ object PerformActions {
      */
     fun performRightGamePadAction(padControls: PadControls) {
         when (padControls) {
-            PadControls.TOP_PRESSED -> robot.apply { keyPress(KeyEvent.VK_TAB);keyRelease(KeyEvent.VK_TAB) }
-            PadControls.BOTTOM_PRESSED -> robot.apply { keyPress(KeyEvent.VK_F);keyRelease(KeyEvent.VK_F) }
+            PadControls.TOP_PRESSED -> robot.keyPress(game.rightPadTop)
+            PadControls.TOP_RELEASED -> robot.keyRelease(game.rightPadTop)
 
-            PadControls.CENTER_PRESSED -> robot.apply { mousePress(InputEvent.BUTTON1_DOWN_MASK) }
-            PadControls.CENTER_RELEASED -> robot.apply { mouseRelease(InputEvent.BUTTON1_DOWN_MASK) }
+            PadControls.BOTTOM_PRESSED -> robot.keyPress(game.rightPadBottom)
+            PadControls.BOTTOM_RELEASED -> robot.keyRelease(game.rightPadBottom)
 
-            PadControls.LEFT_PRESSED -> robot.apply { keyPress(KeyEvent.VK_Q);keyRelease(KeyEvent.VK_Q) }
-            PadControls.RIGHT_PRESSED -> robot.apply { keyPress(KeyEvent.VK_E);keyRelease(KeyEvent.VK_E) }
+            PadControls.CENTER_PRESSED -> robot.mousePress(game.rightPadCenter)
+            PadControls.CENTER_RELEASED -> robot.mouseRelease(game.rightPadCenter)
+
+            PadControls.LEFT_PRESSED -> robot.keyPress(game.rightPadLeft)
+            PadControls.LEFT_RELEASED -> robot.keyRelease(game.rightPadLeft)
+
+            PadControls.RIGHT_PRESSED -> robot.keyPress(game.rightPadRight)
+            PadControls.RIGHT_RELEASED -> robot.keyRelease(game.rightPadRight)
         }
-    }
-
-    private var pressed = false
-
-    /**
-     * handles long key presses for shift
-     */
-    private fun performShiftAction() {
-        if (pressed) {
-            robot.keyRelease(KeyEvent.VK_SHIFT)
-        } else {
-            robot.keyPress(KeyEvent.VK_SHIFT)
-        }
-        pressed = !pressed
     }
 }
