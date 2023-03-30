@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,6 +27,8 @@ import androidx.compose.ui.window.application
 import com.google.gson.Gson
 import connection.ConnectionData
 import services.control.ControlService
+import services.control.PerformActions
+import services.control.data.PadMapping
 import services.stream.StreamService
 import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
@@ -52,6 +55,9 @@ lateinit var streamService: StreamService
 @OptIn(ExperimentalUnitApi::class)
 @Composable
 fun app() {
+    val gameState = remember {
+        mutableStateOf(PadMapping.deathStranding)
+    }
     var leftJoystickServerRunning by remember { mutableStateOf(true) }
     var leftGamePadServerRunning by remember { mutableStateOf(true) }
     var rightGamePadServerRunning by remember { mutableStateOf(true) }
@@ -123,6 +129,21 @@ fun app() {
             text = "Instructions:\ngg" + "\n* Make sure Both the devices (This PC and the Android device) are on the same wifi network." + "\n* Preferably use a WIFI-6 connection for seamless experience." + "\n* A reduced load on the router ensures a better connection.",
             modifier = Modifier.fillMaxWidth(),
         )
+        Spacer(Modifier.fillMaxWidth().height(20.dp))
+        Column(modifier = Modifier.fillMaxWidth()) {
+            PadMapping.getValue.forEach {
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = gameState.value == it,
+                        onClick = {
+                            PerformActions.game = it
+                            gameState.value = it
+                        }
+                    )
+                    Text(text = it.gameName, modifier = Modifier.padding(PaddingValues.Absolute(left = 10.dp)))
+                }
+            }
+        }
     }
 }
 

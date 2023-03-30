@@ -1,5 +1,7 @@
 package services.control
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import com.sun.jna.platform.win32.User32
 import com.sun.jna.platform.win32.WinDef
 import com.sun.jna.platform.win32.WinUser.INPUT
@@ -17,9 +19,12 @@ import java.awt.event.KeyEvent
 object PerformActions {
     private val robot = Robot()
     private var previousLeftJoystickAction: MutableList<Int> = mutableListOf()
-    private val game = PadMapping.deathStranding
+    var game = PadMapping.control
 
     private val input = INPUT()
+
+    private var x = 0f
+    private var y = 0f
 
     init {
         input.type = WinDef.DWORD(INPUT.INPUT_MOUSE.toLong())
@@ -27,6 +32,7 @@ object PerformActions {
         input.input.mi.dwFlags = WinDef.DWORD(0x0001L)
         input.input.mi.time = WinDef.DWORD(0)
         initiateTest()
+        initiateMouseTracker()
     }
 
     /**
@@ -54,31 +60,25 @@ object PerformActions {
     /**
      * this includes the mouse movement using strength and angle as input.
      */
-    fun performMouseTrackAction(mouseData: MouseData, frames: Int = 4) {
+    fun performMouseTrackAction(mouseData: MouseData) {
+        x = mouseData.mouseMovementX.toFloat()
+        y = mouseData.mouseMovementY.toFloat()
         counter++
-        repeat(frames) {
-//            Thread.sleep(1)
-            input.input.mi.apply {
-                dx = WinDef.LONG(((mouseData.mouseMovementX * it) / frames).toLong())
-                dy = WinDef.LONG(((mouseData.mouseMovementY * it) / frames).toLong())
-            }
-            User32.INSTANCE.SendInput(WinDef.DWORD(1L), arrayOf(input), input.size())
-        }
     }
 
-    /**
-     * this includes the mouse movement using strength and angle as input.
-     */
-    fun performMouseTrackAction(mouseData: MutableList<MouseData>) {
-        counter++
-        for (i in mouseData) {
-            println("${i.mouseMovementX}, ${i.mouseMovementY} \t\t-${mouseData.size}")
-//            Thread.sleep(2)
-            input.input.mi.apply {
-                dx = WinDef.LONG((i.mouseMovementX).toLong())
-                dy = WinDef.LONG((i.mouseMovementY).toLong())
+
+    private fun initiateMouseTracker() {
+        CoroutineScope(Dispatchers.IO).launch {
+            while (true) {
+                x *= 0.5f
+                y *= 0.5f
+                Thread.sleep(2)
+                input.input.mi.apply {
+                    dx = WinDef.LONG(x.toLong())
+                    dy = WinDef.LONG(y.toLong())
+                }
+                User32.INSTANCE.SendInput(WinDef.DWORD(1L), arrayOf(input), input.size())
             }
-            User32.INSTANCE.SendInput(WinDef.DWORD(1L), arrayOf(input), input.size())
         }
     }
 
