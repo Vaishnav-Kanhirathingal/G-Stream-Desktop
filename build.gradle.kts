@@ -19,11 +19,11 @@ repositories {
 
 
 dependencies {
-    implementation(compose.desktop.currentOs)
-    implementation("com.google.code.gson:gson:2.10")
+    implementation(compose.desktop.windows_x64)
+    implementation("com.google.code.gson:gson:2.10.1")
 
-    implementation("net.java.dev.jna:jna:5.5.0")
-    implementation("net.java.dev.jna:jna-platform:5.5.0")
+    implementation("net.java.dev.jna:jna:5.12.1")
+    implementation("net.java.dev.jna:jna-platform:5.12.1")
 
 }
 

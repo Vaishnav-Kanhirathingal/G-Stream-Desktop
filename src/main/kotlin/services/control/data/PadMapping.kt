@@ -14,6 +14,8 @@ data class PadMapping(
     val rightPadCenter: Int = BUTTON1_DOWN_MASK,
     val rightPadLeft: Int,
     val rightPadRight: Int,
+
+    val gameName:String
 ) {
     companion object {
         //sample mapping object
@@ -25,6 +27,7 @@ data class PadMapping(
             rightPadBottom = VK_ALT,
             rightPadLeft = VK_Q,
             rightPadRight = VK_E,
+            gameName = "Death Stranding"
         )
         val control = PadMapping(
             leftPadBottom = VK_C,
@@ -34,6 +37,8 @@ data class PadMapping(
             rightPadBottom = VK_CONTROL,
             rightPadLeft = VK_Q,
             rightPadRight = VK_E,
+            gameName = "Control"
         )
+        val getValue = mutableListOf(deathStranding, control)
     }
 }
