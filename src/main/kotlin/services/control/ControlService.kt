@@ -70,12 +70,7 @@ class ControlService(
         try {
             while (true) {
                 val string = inputStream.readUTF()
-                val temp = Gson().fromJson(string, mutableListOf<String>()::class.java)
-                val tempMouse = mutableListOf<MouseData>()
-                for (i in temp) {
-                    tempMouse.add(Gson().fromJson(i, MouseData::class.java))
-                }
-                PerformActions.performMouseTrackAction(tempMouse)
+                PerformActions.performMouseTrackAction(Gson().fromJson(string, MouseData::class.java))
             }
         } catch (e: Exception) {
             e.printStackTrace();rightJoystickServerError()
