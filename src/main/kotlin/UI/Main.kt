@@ -17,7 +17,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.graphics.toPainter
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.google.gson.Gson
@@ -48,7 +49,6 @@ lateinit var controlService: ControlService
 lateinit var streamService: StreamService
 
 @Preview
-@OptIn(ExperimentalUnitApi::class)
 @Composable
 fun app() {
     var leftJoystickServerRunning by remember { mutableStateOf(true) }
@@ -69,33 +69,34 @@ fun app() {
     Column(
         modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)).padding(horizontal = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Spacer(Modifier.fillMaxWidth().height(20.dp))
-        Text(
-            text = "Server Status", fontSize = TextUnit(
-                value = 16f, type = TextUnitType.Sp
-            )
-        )
-        Spacer(Modifier.fillMaxWidth().height(20.dp))
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            StatusBox(active = leftGamePadServerRunning, serverName = "Left Game Pad Server")
-            StatusBox(active = leftJoystickServerRunning, serverName = "Left Joystick Server")
-            StatusBox(active = audioServerRunning, serverName = "Audio Server")
-            StatusBox(active = videoServerRunning, serverName = "Video Server")
-            StatusBox(active = rightJoystickServerRunning, serverName = "Right Joystick Server")
-            StatusBox(active = rightGamePadServerRunning, serverName = "Right Game Pad Server")
+        Text(text = "Server Status", fontSize = 16.sp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.width(10.dp).fillMaxHeight())
+            Image(painter = getConnectionImagePainter(), contentDescription = null)
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.padding(start = 20.dp)
+            ) {
+                statusBox(active = leftGamePadServerRunning, serverName = "Left Game Pad Server")
+                statusBox(active = leftJoystickServerRunning, serverName = "Left Joystick Server")
+                statusBox(active = audioServerRunning, serverName = "Audio Server")
+                statusBox(active = videoServerRunning, serverName = "Video Server")
+                statusBox(active = rightJoystickServerRunning, serverName = "Right Joystick Server")
+                statusBox(active = rightGamePadServerRunning, serverName = "Right Game Pad Server")
+            }
         }
-        Spacer(Modifier.fillMaxWidth().height(20.dp))
-        Image(painter = getConnectionImagePainter(), contentDescription = null)
         Text(text = "Scan this QRCode from the G-Stream app to initiate streaming from this device.")
-        Spacer(Modifier.fillMaxWidth().height(20.dp))
         gameOptionBox()
     }
 }
 
-
 @Composable
-fun StatusBox(active: Boolean, serverName: String) {
+fun statusBox(active: Boolean, serverName: String) {
     val statusSize = 12.dp
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Image(
@@ -107,11 +108,12 @@ fun StatusBox(active: Boolean, serverName: String) {
     }
 }
 
+@Preview
 @Composable
 fun gameOptionBox() {
     var gameState by remember { mutableStateOf(PadMapping.deathStranding) }
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(text = "Select the game to play", fontSize = 20.sp)
+        Text(text = "Select the game to play :-", fontSize = 20.sp)
         PadMapping.getValue.forEach {
             Row(
                 modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
@@ -130,7 +132,7 @@ fun gameOptionBox() {
     }
 }
 
-fun getConnectionImagePainter(size: Int = 400): Painter {
+fun getConnectionImagePainter(size: Int = 300): Painter {
     val data = Gson().toJson(
         ConnectionData(
             serverIpAddress = getAddress() ?: "null",
