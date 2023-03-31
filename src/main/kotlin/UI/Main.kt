@@ -66,8 +66,6 @@ fun app() {
     var videoServerRunning by remember { mutableStateOf(true) }
     streamService = StreamService(audioServerError = { audioServerRunning = false },
         videoServerError = { videoServerRunning = false })
-    val statusSize = 12.dp
-
     Column(
         modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)).padding(horizontal = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -80,55 +78,12 @@ fun app() {
         )
         Spacer(Modifier.fillMaxWidth().height(20.dp))
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = ColorPainter(if (leftGamePadServerRunning) Color.Green else Color.Red),
-                    contentDescription = null,
-                    modifier = Modifier.width(statusSize).height(statusSize)
-                )
-                Text(text = "Left Game Pad Server", modifier = Modifier.padding(start = 10.dp))
-            }
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = ColorPainter(if (leftJoystickServerRunning) Color.Green else Color.Red),
-                    contentDescription = null,
-                    modifier = Modifier.width(statusSize).height(statusSize)
-                )
-                Text(text = "Left Joystick Server", modifier = Modifier.padding(start = 10.dp))
-            }
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-
-                Image(
-                    painter = ColorPainter(if (audioServerRunning) Color.Green else Color.Red),
-                    contentDescription = null,
-                    modifier = Modifier.width(statusSize).height(statusSize)
-                )
-                Text(text = "Audio Server", modifier = Modifier.padding(start = 10.dp))
-            }
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = ColorPainter(if (videoServerRunning) Color.Green else Color.Red),
-                    contentDescription = null,
-                    modifier = Modifier.width(statusSize).height(statusSize)
-                )
-                Text(text = "Video Server", modifier = Modifier.padding(start = 10.dp))
-            }
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = ColorPainter(if (rightJoystickServerRunning) Color.Green else Color.Red),
-                    contentDescription = null,
-                    modifier = Modifier.width(statusSize).height(statusSize)
-                )
-                Text(text = "Right Joystick Server", modifier = Modifier.padding(start = 10.dp))
-            }
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = ColorPainter(if (rightGamePadServerRunning) Color.Green else Color.Red),
-                    contentDescription = null,
-                    modifier = Modifier.width(statusSize).height(statusSize)
-                )
-                Text(text = "Right Game Pad Server", modifier = Modifier.padding(start = 10.dp))
-            }
+            StatusBox(active = leftGamePadServerRunning, serverName = "Left Game Pad Server")
+            StatusBox(active = leftJoystickServerRunning, serverName = "Left Joystick Server")
+            StatusBox(active = audioServerRunning, serverName = "Audio Server")
+            StatusBox(active = videoServerRunning, serverName = "Video Server")
+            StatusBox(active = rightJoystickServerRunning, serverName = "Right Joystick Server")
+            StatusBox(active = rightGamePadServerRunning, serverName = "Right Game Pad Server")
         }
         Spacer(Modifier.fillMaxWidth().height(20.dp))
         Image(painter = getConnectionImagePainter(), contentDescription = null)
@@ -138,6 +93,19 @@ fun app() {
     }
 }
 
+
+@Composable
+fun StatusBox(active: Boolean, serverName: String) {
+    val statusSize = 12.dp
+    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Image(
+            painter = ColorPainter(if (active) Color.Green else Color.Red),
+            contentDescription = null,
+            modifier = Modifier.width(statusSize).height(statusSize)
+        )
+        Text(text = serverName, modifier = Modifier.padding(start = 10.dp))
+    }
+}
 
 @Composable
 fun gameOptionBox() {
