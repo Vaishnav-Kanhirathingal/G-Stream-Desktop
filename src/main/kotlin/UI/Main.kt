@@ -3,7 +3,6 @@ package UI
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -18,10 +17,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.graphics.toPainter
-import androidx.compose.ui.unit.ExperimentalUnitApi
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.google.gson.Gson
@@ -55,9 +51,6 @@ lateinit var streamService: StreamService
 @OptIn(ExperimentalUnitApi::class)
 @Composable
 fun app() {
-    val gameState = remember {
-        mutableStateOf(PadMapping.deathStranding)
-    }
     var leftJoystickServerRunning by remember { mutableStateOf(true) }
     var leftGamePadServerRunning by remember { mutableStateOf(true) }
     var rightGamePadServerRunning by remember { mutableStateOf(true) }
@@ -73,7 +66,7 @@ fun app() {
     var videoServerRunning by remember { mutableStateOf(true) }
     streamService = StreamService(audioServerError = { audioServerRunning = false },
         videoServerError = { videoServerRunning = false })
-    val statusSize = 6.dp
+    val statusSize = 12.dp
 
     Column(
         modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)).padding(horizontal = 10.dp),
@@ -81,72 +74,93 @@ fun app() {
     ) {
         Spacer(Modifier.fillMaxWidth().height(20.dp))
         Text(
-            text = "below dots represent different server states. 'red' means that server has crashed and you might want to restart the service to get it back online and, green means the server is active",
-            fontSize = TextUnit(
+            text = "Server Status", fontSize = TextUnit(
                 value = 16f, type = TextUnitType.Sp
             )
         )
         Spacer(Modifier.fillMaxWidth().height(20.dp))
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
-            modifier = Modifier.border(width = 1.dp, color = Color.Red)
-        ) {
-            Image(
-                painter = ColorPainter(if (leftGamePadServerRunning) Color.Green else Color.Red),
-                contentDescription = null,
-                modifier = Modifier.width(statusSize).height(statusSize)
-            )
-            Image(
-                painter = ColorPainter(if (leftJoystickServerRunning) Color.Green else Color.Red),
-                contentDescription = null,
-                modifier = Modifier.width(statusSize).height(statusSize)
-            )
-            Image(
-                painter = ColorPainter(if (audioServerRunning) Color.Green else Color.Red),
-                contentDescription = null,
-                modifier = Modifier.width(statusSize).height(statusSize)
-            )
-            Image(
-                painter = ColorPainter(if (videoServerRunning) Color.Green else Color.Red),
-                contentDescription = null,
-                modifier = Modifier.width(statusSize).height(statusSize)
-            )
-            Image(
-                painter = ColorPainter(if (rightJoystickServerRunning) Color.Green else Color.Red),
-                contentDescription = null,
-                modifier = Modifier.width(statusSize).height(statusSize)
-            )
-            Image(
-                painter = ColorPainter(if (rightGamePadServerRunning) Color.Green else Color.Red),
-                contentDescription = null,
-                modifier = Modifier.width(statusSize).height(statusSize)
-            )
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = ColorPainter(if (leftGamePadServerRunning) Color.Green else Color.Red),
+                    contentDescription = null,
+                    modifier = Modifier.width(statusSize).height(statusSize)
+                )
+                Text(text = "Left Game Pad Server", modifier = Modifier.padding(start = 10.dp))
+            }
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = ColorPainter(if (leftJoystickServerRunning) Color.Green else Color.Red),
+                    contentDescription = null,
+                    modifier = Modifier.width(statusSize).height(statusSize)
+                )
+                Text(text = "Left Joystick Server", modifier = Modifier.padding(start = 10.dp))
+            }
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+
+                Image(
+                    painter = ColorPainter(if (audioServerRunning) Color.Green else Color.Red),
+                    contentDescription = null,
+                    modifier = Modifier.width(statusSize).height(statusSize)
+                )
+                Text(text = "Audio Server", modifier = Modifier.padding(start = 10.dp))
+            }
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = ColorPainter(if (videoServerRunning) Color.Green else Color.Red),
+                    contentDescription = null,
+                    modifier = Modifier.width(statusSize).height(statusSize)
+                )
+                Text(text = "Video Server", modifier = Modifier.padding(start = 10.dp))
+            }
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = ColorPainter(if (rightJoystickServerRunning) Color.Green else Color.Red),
+                    contentDescription = null,
+                    modifier = Modifier.width(statusSize).height(statusSize)
+                )
+                Text(text = "Right Joystick Server", modifier = Modifier.padding(start = 10.dp))
+            }
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = ColorPainter(if (rightGamePadServerRunning) Color.Green else Color.Red),
+                    contentDescription = null,
+                    modifier = Modifier.width(statusSize).height(statusSize)
+                )
+                Text(text = "Right Game Pad Server", modifier = Modifier.padding(start = 10.dp))
+            }
         }
         Spacer(Modifier.fillMaxWidth().height(20.dp))
         Image(painter = getConnectionImagePainter(), contentDescription = null)
         Text(text = "Scan this QRCode from the G-Stream app to initiate streaming from this device.")
-        Text(
-            text = "Instructions:\ngg" + "\n* Make sure Both the devices (This PC and the Android device) are on the same wifi network." + "\n* Preferably use a WIFI-6 connection for seamless experience." + "\n* A reduced load on the router ensures a better connection.",
-            modifier = Modifier.fillMaxWidth(),
-        )
         Spacer(Modifier.fillMaxWidth().height(20.dp))
-        Column(modifier = Modifier.fillMaxWidth()) {
-            PadMapping.getValue.forEach {
-                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    RadioButton(
-                        selected = gameState.value == it,
-                        onClick = {
-                            PerformActions.game = it
-                            gameState.value = it
-                        }
-                    )
-                    Text(text = it.gameName, modifier = Modifier.padding(PaddingValues.Absolute(left = 10.dp)))
-                }
+        gameOptionBox()
+    }
+}
+
+
+@Composable
+fun gameOptionBox() {
+    var gameState by remember { mutableStateOf(PadMapping.deathStranding) }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(text = "Select the game to play", fontSize = 20.sp)
+        PadMapping.getValue.forEach {
+            Row(
+                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+            ) {
+                RadioButton(selected = gameState == it, onClick = {
+                    PerformActions.game = it
+                    gameState = it
+                })
+                Text(
+                    text = it.gameName,
+                    modifier = Modifier.padding(PaddingValues.Absolute(left = 10.dp)),
+                    fontSize = 20.sp
+                )
             }
         }
     }
 }
-
 
 fun getConnectionImagePainter(size: Int = 400): Painter {
     val data = Gson().toJson(
