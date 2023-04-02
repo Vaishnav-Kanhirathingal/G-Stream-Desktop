@@ -5,9 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,16 +71,18 @@ fun app() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Text(text = "Server Status", fontSize = 16.sp)
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.width(10.dp).fillMaxHeight())
-            Image(painter = getConnectionImagePainter(), contentDescription = null)
+            Column {
+                Image(painter = getConnectionImagePainter(), contentDescription = null)
+                Text(text = "Scan this QRCode from the G-Stream app\nto initiate streaming from this device.")
+            }
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.padding(start = 20.dp)
+                modifier = Modifier.padding(start = 20.dp).fillMaxWidth()
             ) {
                 statusBox(active = leftGamePadServerRunning, serverName = "Left Game Pad Server")
                 statusBox(active = leftJoystickServerRunning, serverName = "Left Joystick Server")
@@ -90,7 +92,16 @@ fun app() {
                 statusBox(active = rightGamePadServerRunning, serverName = "Right Game Pad Server")
             }
         }
-        Text(text = "Scan this QRCode from the G-Stream app to initiate streaming from this device.")
+        addGameTextField {
+            try {
+                val x = Gson().fromJson(it, PadMapping::class.java)
+                PadMapping.defaultGameList.add(x)
+                // TODO: set new buttons and test
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        linksRow()
         gameOptionBox()
     }
 }
@@ -108,13 +119,45 @@ fun statusBox(active: Boolean, serverName: String) {
     }
 }
 
+@Composable
+fun addGameTextField(addGameToList: (String) -> Unit) {
+    var jsonText by remember {
+        mutableStateOf("")
+    }
+    TextField(
+        value = jsonText,
+        modifier = Modifier.fillMaxWidth(),
+        onValueChange = { jsonText = it; println(jsonText) },
+        label = { Text("Enter a json formatted string here to add support for a new game. (read desktop documentation)") },
+        trailingIcon = {
+            IconButton(onClick = { addGameToList(jsonText) }) {
+                Icon(
+                    Icons.Default.AccountBox,
+                    contentDescription = null
+                )
+            }
+        },
+    )
+
+}
+
+@Composable
+fun linksRow() {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        // TODO: add links
+        Button(onClick = {}) { Text(text = "Desktop Documentation") }
+        Button(onClick = {}) { Text(text = "Android Documentation") }
+        Button(onClick = {}) { Text(text = "Android GitHub Repository") }
+    }
+}
+
 @Preview
 @Composable
 fun gameOptionBox() {
     var gameState by remember { mutableStateOf(PadMapping.deathStranding) }
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Select the game to play :-", fontSize = 20.sp)
-        PadMapping.getValue.forEach {
+        PadMapping.defaultGameList.forEach {
             Row(
                 modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
             ) {

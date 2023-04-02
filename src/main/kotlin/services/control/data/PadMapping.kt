@@ -39,6 +39,6 @@ data class PadMapping(
             rightPadRight = VK_E,
             gameName = "Control"
         )
-        val getValue = mutableListOf(deathStranding, control)
+        val defaultGameList = mutableListOf(deathStranding, control)
     }
 }
