@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,9 +27,11 @@ import services.control.ControlService
 import services.control.PerformActions
 import services.control.data.PadMapping
 import services.stream.StreamService
+import java.awt.Desktop
 import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.NetworkInterface
+import java.net.URI
 import java.net.URL
 import java.util.*
 import javax.imageio.ImageIO
@@ -40,9 +42,7 @@ fun main() = application {
         title = "G-Stream",
         onCloseRequest = ::exitApplication,
         resizable = true,
-    ) {
-        MaterialTheme { app() }
-    }
+    ) { MaterialTheme { app() } }
 }
 
 lateinit var controlService: ControlService
@@ -66,6 +66,9 @@ fun app() {
     var videoServerRunning by remember { mutableStateOf(true) }
     streamService = StreamService(audioServerError = { audioServerRunning = false },
         videoServerError = { videoServerRunning = false })
+
+    val gameList = remember { mutableStateListOf(PadMapping.deathStranding, PadMapping.control) }
+
     Column(
         modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)).padding(horizontal = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -95,14 +98,14 @@ fun app() {
         addGameTextField {
             try {
                 val x = Gson().fromJson(it, PadMapping::class.java)
-                PadMapping.defaultGameList.add(x)
-                // TODO: set new buttons and test
+                gameList.add(x)
+                // TODO: display that the process has completed
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
         linksRow()
-        gameOptionBox()
+        gameOptionBox(gameList = gameList)
     }
 }
 
@@ -121,9 +124,7 @@ fun statusBox(active: Boolean, serverName: String) {
 
 @Composable
 fun addGameTextField(addGameToList: (String) -> Unit) {
-    var jsonText by remember {
-        mutableStateOf("")
-    }
+    var jsonText by remember { mutableStateOf("") }
     TextField(
         value = jsonText,
         modifier = Modifier.fillMaxWidth(),
@@ -132,7 +133,7 @@ fun addGameTextField(addGameToList: (String) -> Unit) {
         trailingIcon = {
             IconButton(onClick = { addGameToList(jsonText) }) {
                 Icon(
-                    Icons.Default.AccountBox,
+                    imageVector = Icons.Filled.Check,
                     contentDescription = null
                 )
             }
@@ -144,20 +145,19 @@ fun addGameTextField(addGameToList: (String) -> Unit) {
 @Composable
 fun linksRow() {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        // TODO: add links
-        Button(onClick = {}) { Text(text = "Desktop Documentation") }
-        Button(onClick = {}) { Text(text = "Android Documentation") }
-        Button(onClick = {}) { Text(text = "Android GitHub Repository") }
+        Button(onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop") }) { Text(text = "Desktop Documentation") }
+        Button(onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE") }) { Text(text = "Android Documentation") }
+        Button(onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE/releases") }) { Text(text = "Android APK download") }
     }
 }
 
 @Preview
 @Composable
-fun gameOptionBox() {
+fun gameOptionBox(gameList: List<PadMapping>) {
     var gameState by remember { mutableStateOf(PadMapping.deathStranding) }
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Select the game to play :-", fontSize = 20.sp)
-        PadMapping.defaultGameList.forEach {
+        gameList.forEach {
             Row(
                 modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
             ) {
@@ -212,4 +212,15 @@ fun getImageFromUrl(link: String): Painter {
     ImageIO.write(ImageIO.read(connection.inputStream), "png", stream)
     return org.jetbrains.skia.Image.makeFromEncoded(stream.toByteArray()).toComposeImageBitmap().toAwtImage()
         .toPainter()
+}
+
+
+fun openUrl(url: String) {
+    try {
+        val uri = URI(url)
+        val dt = Desktop.getDesktop()
+        dt.browse(uri)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }
