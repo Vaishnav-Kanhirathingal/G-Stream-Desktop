@@ -214,12 +214,9 @@ fun getImageFromUrl(link: String): Painter {
         .toPainter()
 }
 
-
 fun openUrl(url: String) {
     try {
-        val uri = URI(url)
-        val dt = Desktop.getDesktop()
-        dt.browse(uri)
+        Desktop.getDesktop().browse(URI(url))
     } catch (e: Exception) {
         e.printStackTrace()
     }
