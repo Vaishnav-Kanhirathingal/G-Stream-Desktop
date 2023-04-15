@@ -1,7 +1,5 @@
 package services.control
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import com.sun.jna.platform.win32.User32
 import com.sun.jna.platform.win32.WinDef
 import com.sun.jna.platform.win32.WinUser.INPUT
@@ -70,8 +68,8 @@ object PerformActions {
     private fun initiateMouseTracker() {
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
-                x *= 0.5f
-                y *= 0.5f
+                x *= 0.04f
+                y *= 0.04f
                 Thread.sleep(2)
                 input.input.mi.apply {
                     dx = WinDef.LONG(x.toLong())

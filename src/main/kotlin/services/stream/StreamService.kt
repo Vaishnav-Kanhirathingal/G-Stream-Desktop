@@ -74,7 +74,6 @@ class StreamService(
             while (true) {
                 Thread.sleep(1000)
                 val str = "random str ${Random(100).nextInt()}"
-                println(str)
                 outputStream.apply {
                     writeUTF(str)
                     flush()
@@ -86,14 +85,3 @@ class StreamService(
         }
     }
 }
-
-/**
- * formats checked -
- * WebM
- * HLS
- * OBS (github)
- * MPEG-DASH (Native support on Android devices)
- * WebRTC (video conferencing protocol)
- * H.323 (sends audio and video data streams via the User Datagram Protocol (UDP) )
- * T.120 (covers communications over LAN)
- */

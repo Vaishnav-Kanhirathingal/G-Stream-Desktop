@@ -197,8 +197,10 @@ fun getAddress(): String? {
         val isWlan = netInterface.name.contains("wlan")
         if (listOfAddresses.isNotEmpty() && isWlan) {
             for (inetAddress in listOfAddresses) {
-                println("\n\nDisplay name:\t${netInterface.displayName}\nName:\t\t\t${netInterface.name}\nInetAddress:\t${inetAddress.hostAddress}")
-                if (inetAddress.hostAddress.startsWith("192.168")) return inetAddress.hostAddress
+                println("\n\nDisplay name:\t${netInterface.displayName}\n" +
+                        "Name:\t\t\t${netInterface.name}\n" +
+                        "InetAddress:\t${inetAddress.hostAddress}")
+                if (inetAddress.hostAddress.startsWith("192.168.0")) return inetAddress.hostAddress
             }
         }
     }
