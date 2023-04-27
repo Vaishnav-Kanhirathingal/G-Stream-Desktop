@@ -64,12 +64,22 @@ object PerformActions {
         counter++
     }
 
+    fun performMouseTrackAction(mouseData: MouseData, factor: Int) {
+        val mouseX = mouseData.mouseMovementX.toLong() / factor
+        val mouseY = mouseData.mouseMovementY.toLong() / factor
+        input.input.mi.apply {
+            dx = WinDef.LONG(mouseX)
+            dy = WinDef.LONG(mouseY)
+        }
+        User32.INSTANCE.SendInput(WinDef.DWORD(1L), arrayOf(input), input.size())
+        counter++
+    }
 
     private fun initiateMouseTracker() {
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
-                x *= 0.04f
-                y *= 0.04f
+                x *= 0.2f
+                y *= 0.2f
                 Thread.sleep(2)
                 input.input.mi.apply {
                     dx = WinDef.LONG(x.toLong())
