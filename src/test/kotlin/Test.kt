@@ -1,38 +1,26 @@
-import com.google.gson.GsonBuilder
-import services.control.data.PadMapping
-import java.awt.Desktop
-import java.net.URI
+import java.net.NetworkInterface
+import java.util.*
 
-fun main(){
-    testBrowser()
+fun main() {
+    getAddress()
 }
 
-fun testBrowser() {
-    try {
-        val uri = URI("http://google.com/")
-        val dt = Desktop.getDesktop()
-        dt.browse(uri)
-    } catch (e: Exception) {
-        e.printStackTrace()
+
+fun getAddress() {
+    for (netInterface in Collections.list(NetworkInterface.getNetworkInterfaces())) {
+        val listOfAddresses = Collections.list(netInterface.inetAddresses)
+
+        val isWlan = netInterface.name.contains("wlan")
+        if (listOfAddresses.isNotEmpty() && isWlan) {
+            for (inetAddress in listOfAddresses) {
+                if (inetAddress.hostAddress.startsWith("192.168") && !netInterface.displayName.contains("Direct")) {
+                    println(
+                        "\n\nDisplay name:\t${netInterface.displayName}\n" +
+                                "Name:\t\t\t${netInterface.name}\n" +
+                                "InetAddress:\t${inetAddress.hostAddress}"
+                    )
+                }
+            }
+        }
     }
-}
-
-fun testJson() {
-    println(
-        GsonBuilder().setPrettyPrinting().create().toJson(
-            PadMapping(
-                leftPadTop = 2,
-                leftPadBottom = 2,
-                leftPadCenter = 2,
-                leftPadLeft = 2,
-                leftPadRight = 2,
-                rightPadTop = 2,
-                rightPadBottom = 2,
-                rightPadCenter = 1,
-                rightPadLeft = 1,
-                rightPadRight = 1,
-                gameName = "Valorant"
-            )
-        )
-    )
 }
