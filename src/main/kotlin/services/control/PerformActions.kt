@@ -51,7 +51,6 @@ object PerformActions {
         }
         for (i in previousLeftJoystickAction) robot.keyRelease(i)
         for (i in currentKey) robot.keyPress(i)
-
         previousLeftJoystickAction = currentKey
     }
 

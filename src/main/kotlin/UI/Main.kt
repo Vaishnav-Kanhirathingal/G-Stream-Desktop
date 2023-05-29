@@ -131,15 +131,20 @@ fun addGameTextField(addGameToList: (String) -> Unit) {
         onValueChange = { jsonText = it; println(jsonText) },
         label = { Text("Enter a json formatted string here to add support for a new game. (read desktop documentation)") },
         trailingIcon = {
-            IconButton(onClick = { addGameToList(jsonText) }) {
-                Icon(
-                    imageVector = Icons.Filled.Check,
-                    contentDescription = null
-                )
-            }
+            IconButton(
+                onClick = {
+                    addGameToList(jsonText)
+                    jsonText = ""
+                },
+                content = {
+                    Icon(
+                        imageVector = Icons.Filled.Check,
+                        contentDescription = null
+                    )
+                }
+            )
         },
     )
-
 }
 
 @Composable
