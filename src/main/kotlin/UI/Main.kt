@@ -72,41 +72,46 @@ fun app() {
     Column(
         modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)).padding(horizontal = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Spacer(modifier = Modifier.width(10.dp).fillMaxHeight())
-            Column {
-                Image(painter = getConnectionImagePainter(), contentDescription = null)
-                Text(text = "Scan this QRCode from the G-Stream app\nto initiate streaming from this device.")
-            }
-            Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.padding(start = 20.dp).fillMaxWidth()
-            ) {
-                statusBox(active = leftGamePadServerRunning, serverName = "Left Game Pad Server")
-                statusBox(active = leftJoystickServerRunning, serverName = "Left Joystick Server")
-                statusBox(active = audioServerRunning, serverName = "Audio Server")
-                statusBox(active = videoServerRunning, serverName = "Video Server")
-                statusBox(active = rightJoystickServerRunning, serverName = "Right Joystick Server")
-                statusBox(active = rightGamePadServerRunning, serverName = "Right Game Pad Server")
-            }
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        content = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                content = {
+                    Spacer(modifier = Modifier.width(10.dp).fillMaxHeight())
+                    Column {
+                        Image(painter = getConnectionImagePainter(), contentDescription = null)
+                        Text(text = "Scan this QRCode from the G-Stream app\nto initiate streaming from this device.")
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.padding(start = 20.dp).fillMaxWidth(),
+                        content = {
+                            statusBox(active = leftGamePadServerRunning, serverName = "Left Game Pad Server")
+                            statusBox(active = leftJoystickServerRunning, serverName = "Left Joystick Server")
+                            statusBox(active = audioServerRunning, serverName = "Audio Server")
+                            statusBox(active = videoServerRunning, serverName = "Video Server")
+                            statusBox(active = rightJoystickServerRunning, serverName = "Right Joystick Server")
+                            statusBox(active = rightGamePadServerRunning, serverName = "Right Game Pad Server")
+                        }
+                    )
+                }
+            )
+            addGameTextField(
+                addGameToList = {
+                    try {
+                        val x = Gson().fromJson(it, PadMapping::class.java)
+                        gameList.add(x)
+                        // TODO: display that the process has completed
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            )
+            linksRow()
+            gameOptionBox(gameList = gameList)
         }
-        addGameTextField {
-            try {
-                val x = Gson().fromJson(it, PadMapping::class.java)
-                gameList.add(x)
-                // TODO: display that the process has completed
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-        linksRow()
-        gameOptionBox(gameList = gameList)
-    }
+    )
 }
 
 @Composable
@@ -118,7 +123,10 @@ fun statusBox(active: Boolean, serverName: String) {
             contentDescription = null,
             modifier = Modifier.width(statusSize).height(statusSize)
         )
-        Text(text = serverName, modifier = Modifier.padding(start = 10.dp))
+        Text(
+            text = serverName,
+            modifier = Modifier.padding(start = 10.dp)
+        )
     }
 }
 
@@ -149,35 +157,56 @@ fun addGameTextField(addGameToList: (String) -> Unit) {
 
 @Composable
 fun linksRow() {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        Button(onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop") }) { Text(text = "Desktop Documentation") }
-        Button(onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE") }) { Text(text = "Android Documentation") }
-        Button(onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE/releases") }) { Text(text = "Android APK download") }
-    }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        content = {
+            Button(
+                onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/blob/main/README.md") },
+                content = { Text(text = "Desktop Documentation") }
+            )
+            Button(
+                onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE/blob/main/README.md") },
+                content = { Text(text = "Android Documentation") }
+            )
+            Button(
+                onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE/releases") },
+                content = { Text(text = "Android APK download") }
+            )
+        }
+    )
 }
 
 @Preview
 @Composable
 fun gameOptionBox(gameList: List<PadMapping>) {
     var gameState by remember { mutableStateOf(PadMapping.deathStranding) }
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(text = "Select the game to play :-", fontSize = 20.sp)
-        gameList.forEach {
-            Row(
-                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(selected = gameState == it, onClick = {
-                    PerformActions.game = it
-                    gameState = it
-                })
-                Text(
-                    text = it.gameName,
-                    modifier = Modifier.padding(PaddingValues.Absolute(left = 10.dp)),
-                    fontSize = 20.sp
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        content = {
+            Text(text = "Select the game to play :-", fontSize = 20.sp)
+            gameList.forEach {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    content = {
+                        RadioButton(
+                            selected = gameState == it,
+                            onClick = {
+                                PerformActions.game = it
+                                gameState = it
+                            }
+                        )
+                        Text(
+                            text = it.gameName,
+                            modifier = Modifier.padding(PaddingValues.Absolute(left = 10.dp)),
+                            fontSize = 20.sp
+                        )
+                    }
                 )
             }
         }
-    }
+    )
 }
 
 fun getConnectionImagePainter(size: Int = 300): Painter {
