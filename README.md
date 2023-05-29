@@ -19,27 +19,54 @@ This project is an attempt to localize cloud gaming services. The way this proje
 
 ### Start Screen
 
-the start screen contains a QR code and 6 status lights which indicate the status of multiple connections created
-between the two devices. On the same screen We also have a text input box. Here, we can enter a JSON formatted text
-containing the data required to assign values for key bindings for a new game. for example:-
+the start screen contains a QR code and 6 status lights which indicate the status of multiple connections created between the two devices. On the same screen We also have a text input box. Here, we can enter a JSON formatted text containing the data required to assign values for key bindings for a new game.
+
+[todo - PIC of default screen]
+
+For example:-
+
+> You can get the required values for each button from [here](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes). Before assgining, You need to convert each value to it's integer value. eg - `0x10 = 16`
+
+With options:
 
 ``` JSON
 {
-  "leftPadTop": 32,// optional if required to change
+  "leftPadTop": 32,
   "leftPadBottom": 67,
-  "leftPadCenter": 16,// optional if required to change
-  "leftPadLeft": 4096,// optional if required to change & is used to perform mouse clicks, preferrably do not change
+  "leftPadCenter": 16,
+  "leftPadLeft": 4096,
   "leftPadRight": 9,
   "rightPadTop": 70,
   "rightPadBottom": 17,
-  "rightPadCenter": 1024,// optional if required to change & is used to perform mouse clicks, preferrably do not change
+  "rightPadCenter": 1024,
   "rightPadLeft": 81,
   "rightPadRight": 69,
-  "gameName": "Control example"
+  "gameName": "Game-Name"
 }
 ```
 
-NOTE: `leftPadLeft` and `rightPadCenter` use mouse buttons and are best left unchanged. The default values for the `PadMapping` class include:
+Without options:
+
+``` JSON
+{
+  "leftPadBottom": 67,
+  "leftPadRight": 9,
+  "rightPadTop": 70,
+  "rightPadBottom": 17,
+  "rightPadLeft": 81,
+  "rightPadRight": 69,
+  "gameName": "Game-Name"
+}
+```
+
+NOTE:
+
+- `leftPadTop`: optional if required to change
+- `leftPadCenter`: optional if required to change
+- `leftPadLeft`: optional if required to change & is used to perform mouse clicks, preferrably do not change
+- `rightPadCenter`: optional if required to change & is used to perform mouse clicks, preferrably do not change
+
+The default values for the `PadMapping` class include:
 
 ``` Kotlin
 data class PadMapping(
@@ -66,8 +93,17 @@ Example:
 [todo - PIC with default value]
 [todo - PIC without default value]
 
+### Button Rows
+
 - Desktop Documentation: Opens the readme documentation for the desktop application
 - Android Documentation: Opens the readme documentation for the android application
 - Android APK download: Opens the release section for the android application
 
-you can get the required values for each button from [here](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes). Before assgining, You need to convert each value to it's integer value. eg - `0x10 = 16`
+### Game Selector
+
+We can select the game we want from the radio group. The new game pad mapping gets added to the bottom of the list. we can then select the new game to use the new mappings.
+
+## Gameplay Screenshots
+
+[todo - PIC Desktop GIF]
+[todo - PIC Android GIF]
