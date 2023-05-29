@@ -23,16 +23,16 @@ the start screen contains a QR code and 6 status lights which indicate the statu
 between the two devices. On the same screen We also have a text input box. Here, we can enter a JSON formatted text
 containing the data required to assign values for key bindings for a new game. for example:-
 
-```
+``` JSON
 {
-  "leftPadTop": 32,
+  "leftPadTop": 32,// optional if required to change
   "leftPadBottom": 67,
-  "leftPadCenter": 16,
-  "leftPadLeft": 4096,
+  "leftPadCenter": 16,// optional if required to change
+  "leftPadLeft": 4096,// optional if required to change & is used to perform mouse clicks, preferrably do not change
   "leftPadRight": 9,
   "rightPadTop": 70,
   "rightPadBottom": 17,
-  "rightPadCenter": 1024,
+  "rightPadCenter": 1024,// optional if required to change & is used to perform mouse clicks, preferrably do not change
   "rightPadLeft": 81,
   "rightPadRight": 69,
   "gameName": "Control example"
@@ -41,7 +41,7 @@ containing the data required to assign values for key bindings for a new game. f
 
 NOTE: `leftPadLeft` and `rightPadCenter` use mouse buttons and are best left unchanged. The default values for the `PadMapping` class include:
 
-```
+``` Kotlin
 data class PadMapping(
     val leftPadTop: Int = VK_SPACE,
     val leftPadBottom: Int,
@@ -58,8 +58,16 @@ data class PadMapping(
     val gameName: String
 )
 ```
+
 Every attribute without a default value is to be mentioned inside the text box. To continue using the default value for your new game, You simply ignore the attribute.
 
 Example:
 
-[todo - PIC]
+[todo - PIC with default value]
+[todo - PIC without default value]
+
+- Desktop Documentation: Opens the readme documentation for the desktop application
+- Android Documentation: Opens the readme documentation for the android application
+- Android APK download: Opens the release section for the android application
+
+you can get the required values for each button from [here](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes). Before assgining, You need to convert each value to it's integer value. eg - `0x10 = 16`
