@@ -3,9 +3,9 @@ package services.control.data
 import java.awt.event.KeyEvent.*
 
 data class PadMapping(
-    val leftPadTop: Int= VK_SPACE,
+    val leftPadTop: Int = VK_SPACE,
     val leftPadBottom: Int,
-    val leftPadCenter: Int= VK_SHIFT,
+    val leftPadCenter: Int = VK_SHIFT,
     val leftPadLeft: Int = BUTTON3_DOWN_MASK,
     val leftPadRight: Int,
 
@@ -15,7 +15,7 @@ data class PadMapping(
     val rightPadLeft: Int,
     val rightPadRight: Int,
 
-    val gameName:String
+    val gameName: String
 ) {
     companion object {
         //sample mapping object

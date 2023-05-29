@@ -17,4 +17,49 @@ This project is an attempt to localize cloud gaming services. The way this proje
 
 ## Guide
 
-todo...
+### Start Screen
+
+the start screen contains a QR code and 6 status lights which indicate the status of multiple connections created
+between the two devices. On the same screen We also have a text input box. Here, we can enter a JSON formatted text
+containing the data required to assign values for key bindings for a new game. for example:-
+
+```
+{
+  "leftPadTop": 32,
+  "leftPadBottom": 67,
+  "leftPadCenter": 16,
+  "leftPadLeft": 4096,
+  "leftPadRight": 9,
+  "rightPadTop": 70,
+  "rightPadBottom": 17,
+  "rightPadCenter": 1024,
+  "rightPadLeft": 81,
+  "rightPadRight": 69,
+  "gameName": "Control example"
+}
+```
+
+NOTE: `leftPadLeft` and `rightPadCenter` use mouse buttons and are best left unchanged. The default values for the `PadMapping` class include:
+
+```
+data class PadMapping(
+    val leftPadTop: Int = VK_SPACE,
+    val leftPadBottom: Int,
+    val leftPadCenter: Int = VK_SHIFT,
+    val leftPadLeft: Int = BUTTON3_DOWN_MASK,
+    val leftPadRight: Int,
+
+    val rightPadTop: Int,
+    val rightPadBottom: Int,
+    val rightPadCenter: Int = BUTTON1_DOWN_MASK,
+    val rightPadLeft: Int,
+    val rightPadRight: Int,
+
+    val gameName: String
+)
+```
+Every attribute without a default value is to be mentioned inside the text box. To continue using the default value for your new game, You simply ignore the attribute.
+
+Example:
+
+[todo - PIC]

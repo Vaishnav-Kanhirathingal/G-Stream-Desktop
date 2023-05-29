@@ -6,7 +6,7 @@ import java.time.LocalDate
 import java.util.*
 
 fun main() {
-    testDate()
+    getNewGameData()
 }
 
 
@@ -41,14 +41,14 @@ fun getNewGameData() {
                 rightPadBottom = KeyEvent.VK_CONTROL,
                 rightPadLeft = KeyEvent.VK_Q,
                 rightPadRight = KeyEvent.VK_E,
-                gameName = "Control"
+                gameName = "Control example"
             )
         )
     )
 }
 
 
-fun testDate(){
-    val x:LocalDate = LocalDate.of(1,11,1)
+fun testDate() {
+    val x: LocalDate = LocalDate.of(1, 11, 1)
     println(x.month.name)
 }
