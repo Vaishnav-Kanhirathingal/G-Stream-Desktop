@@ -120,6 +120,8 @@ Example:
 
 ![pic of after adding the game](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/99bd2bea-3344-4398-a4e6-57ac5cf4cbbb "pic of after adding the game")
 
+> An example pic of after adding the game
+
 ### Button Rows
 
 - Desktop Documentation: Opens the readme documentation for the desktop application
