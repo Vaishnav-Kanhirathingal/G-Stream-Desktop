@@ -13,14 +13,14 @@ the frame to be displayed to give visual on the gaming device.
 ## What does this project aims at?
 
 This project is an attempt to localize cloud gaming services. The way this project achieves this is by running high-end
-games on the user’s personal computer preferably a windows machine and streaming that game to their mobile device. The
+games on the user’s personal computer preferably a Windows machine and streaming that game to their mobile device. The
 mobile app has joystick and game-pad buttons which are mapped to key-presses and mouse movement. The server receives
 this data and interprets it to perform necessary actions. To make sure the user can see the gameplay, The server would
 also stream the display to the mobile device. The localized implementation would run on a local network. This means that
 internet isn’t necessary to run the service. The network hops would take place locally between the mobile device and the
 PC through a LAN connection. This means the connection would be established using LAN IP addresses. The application uses
 a QR code to establish connection between the server (preferably a Windows machine) and the client (mobile device). The
-QR code containes the IP address of the server and the port numbers for different services such as port for gameplay
+QR code contains the IP address of the server and the port numbers for different services such as port for gameplay
 screen sharing, joystick controls, etc. After establishing a connection, the user can launch the game of their choice
 and play as required. The strength and stability of the connection depends on the Wi-Fi connection strength and whether
 the network is already saturated with load. A free network would provide a lower latency and more stable connection.
@@ -28,7 +28,7 @@ the network is already saturated with load. A free network would provide a lower
 ## Project Repos
 
 [![Game - Stream android app icon](https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE/blob/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png?raw=true "[Game - Stream Mobile] - This app is responsible for sending control signals to the desktop side. It also displays gameplay streamed from the PC")](https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE)
-[![Game - Stream desktop app icon](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/blob/main/src/main/resources/app_icon_mipmap/mipmap-xxxhdpi/ic_launcher.png?raw=true "[Game - Stream Desktop] - This app is responsible for recieving control signals from the android side. It also streams gameplay to the android device")](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop)
+[![Game - Stream desktop app icon](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/blob/main/src/main/resources/app_icon_mipmap/mipmap-xxxhdpi/ic_launcher.png?raw=true "[Game - Stream Desktop] - This app is responsible for receiving control signals from the android side. It also streams gameplay to the android device")](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop)
 
 ## Guide
 
@@ -38,17 +38,15 @@ the start screen contains a QR code and 6 status lights which indicate the statu
 between the two devices. On the same screen We also have a text input box. Here, we can enter a JSON formatted text
 containing the data required to assign values for key bindings for a new game.
 
-![image](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/f5bddf14-6890-489a-a9e2-6390df5289c7)
+![image](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/f5bddf14-6890-489a-a9e2-6390df5289c7 "This is the start up screen")
 
-[todo - PIC of default screen]
+The above screen showcases the default UI of the Windows app
 
-For example:-
+> You can get the required values for each button from
+> [here](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes). Before assigning, You need to
+> convert each value to its integer value. eg - `0x10 = 16`
 
-> You can get the required values for each button
-> from [here](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes). Before assgining, You need to
-> convert each value to it's integer value. eg - `0x10 = 16`
-
-With options:
+An example JSON text with options:
 
 ``` JSON
 {
@@ -66,7 +64,7 @@ With options:
 }
 ```
 
-Without options:
+An example JSON text without options:
 
 ``` JSON
 {
@@ -84,8 +82,8 @@ NOTE:
 
 - `leftPadTop`: optional if required to change
 - `leftPadCenter`: optional if required to change
-- `leftPadLeft`: optional if required to change & is used to perform mouse clicks, preferrably do not change
-- `rightPadCenter`: optional if required to change & is used to perform mouse clicks, preferrably do not change
+- `leftPadLeft`: optional if required to change & is used to perform mouse clicks, preferably do not change
+- `rightPadCenter`: optional if required to change & is used to perform mouse clicks, preferably do not change
 
 The default values for the `PadMapping` class include:
 
@@ -107,22 +105,20 @@ data class PadMapping(
 )
 ```
 
-Every attribute without a default value is to be mentioned inside the text box. To continue using the default value for
-your new game, You simply ignore the attribute.
+Every attribute without a default value has to be mentioned inside the text box without failure. To continue using the
+default value for your new game, You simply ignore the attribute.
 
 Example:
 
-![image](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/c27518c2-b5c1-4490-8396-414606f65b8f)
+![pic with all options being changed](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/c27518c2-b5c1-4490-8396-414606f65b8f "pic with all options being changed")
 
-[todo - PIC with default value]
+> An example with all the values being changed
 
-![image](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/0af90163-b01a-49da-b4f8-536064e391f4)
+![pic with only the necessary options being changed](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/0af90163-b01a-49da-b4f8-536064e391f4 "pic with only the necessary options being changed")
 
-[todo - PIC without default value]
+> An example with only the necessary values being changed
 
-![image](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/99bd2bea-3344-4398-a4e6-57ac5cf4cbbb)
-
-[TODO - pic after adding game]
+![pic of after adding the game](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/99bd2bea-3344-4398-a4e6-57ac5cf4cbbb "pic of after adding the game")
 
 ### Button Rows
 
