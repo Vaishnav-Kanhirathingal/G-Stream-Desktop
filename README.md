@@ -38,6 +38,8 @@ the start screen contains a QR code and 6 status lights which indicate the statu
 between the two devices. On the same screen We also have a text input box. Here, we can enter a JSON formatted text
 containing the data required to assign values for key bindings for a new game.
 
+![image](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/f5bddf14-6890-489a-a9e2-6390df5289c7)
+
 [todo - PIC of default screen]
 
 For example:-
@@ -110,9 +112,17 @@ your new game, You simply ignore the attribute.
 
 Example:
 
+![image](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/c27518c2-b5c1-4490-8396-414606f65b8f)
+
 [todo - PIC with default value]
 
+![image](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/0af90163-b01a-49da-b4f8-536064e391f4)
+
 [todo - PIC without default value]
+
+![image](https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/assets/94210466/99bd2bea-3344-4398-a4e6-57ac5cf4cbbb)
+
+[TODO - pic after adding game]
 
 ### Button Rows
 
