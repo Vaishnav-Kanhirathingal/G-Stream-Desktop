@@ -30,18 +30,18 @@ class StreamService(
         // TODO: set screen resolution
         scope.launch { initiateVideoStreaming() }
         scope.launch { initiateAudioStreaming() }
-        scope.launch {
-            while (true) {
-                Thread.sleep(1000)
-                println("frames per second = $frames")
-                frames = 0
-            }
-        }
     }
 
     private val ratio = 3
     private val inputWidth = 1920
     private val inputHeight = 1080
+
+    fun getFrames(): Int {
+        val temp = frames
+        println("frames = $frames")
+        frames = 0
+        return temp
+    }
 
     private suspend fun initiateVideoStreaming() {
         val outputStream = DataOutputStream(screenSocket.accept().getOutputStream())

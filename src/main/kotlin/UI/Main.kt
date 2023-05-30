@@ -23,6 +23,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.google.gson.Gson
 import connection.ConnectionData
+import kotlinx.coroutines.delay
 import services.control.ControlService
 import services.control.PerformActions
 import services.control.data.PadMapping
@@ -36,13 +37,16 @@ import java.net.URL
 import java.util.*
 import javax.imageio.ImageIO
 
-fun main() = application {
-    Window(
-        icon = getImageFromUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/blob/main/src/main/resources/app_icon_mipmap/mipmap-hdpi/ic_launcher.png?raw=true"),
-        title = "G-Stream",
-        onCloseRequest = ::exitApplication,
-        resizable = true,
-    ) { MaterialTheme { app() } }
+fun main() {
+    application {
+        Window(
+            icon = getImageFromUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/blob/main/src/main/resources/app_icon_mipmap/mipmap-hdpi/ic_launcher.png?raw=true"),
+            title = "G-Stream",
+            onCloseRequest = ::exitApplication,
+            resizable = true,
+            content = { MaterialTheme { app() } }
+        )
+    }
 }
 
 lateinit var controlService: ControlService
@@ -68,20 +72,22 @@ fun app() {
         videoServerError = { videoServerRunning = false })
 
     val gameList = remember { mutableStateListOf(PadMapping.deathStranding, PadMapping.control) }
-
     Column(
-        modifier = Modifier.fillMaxWidth().verticalScroll(ScrollState(0)).padding(horizontal = 10.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(ScrollState(0))
+            .padding(horizontal = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp),
         content = {
+            fpsCounter()
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 content = {
-                    Spacer(modifier = Modifier.width(10.dp).fillMaxHeight())
                     Column {
                         Image(painter = getConnectionImagePainter(), contentDescription = null)
-                        Text(text = "Scan this QRCode from the G-Stream app\nto initiate streaming from this device.")
+                        Text(text = "Scan this QRCode from the G-Stream\napp to initiate streaming from this device.")
                     }
                     Column(
                         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -112,6 +118,21 @@ fun app() {
             gameOptionBox(gameList = gameList)
         }
     )
+}
+
+@Composable
+fun fpsCounter() {
+    val fps = remember { mutableStateOf(0) }
+    LaunchedEffect(
+        key1 = fps,
+        block = {
+            while (true) {
+                delay(1000L)
+                fps.value = streamService.getFrames()
+            }
+        }
+    )
+    Text(text = "FPS: ${fps.value}")
 }
 
 @Composable
