@@ -16,7 +16,6 @@ class StreamService(
     val audioServerError: () -> Unit,
     val videoServerError: () -> Unit
 ) {
-
     private val screenSocket = ServerSocket(0)
     private val audioSocket = ServerSocket(0)
 
