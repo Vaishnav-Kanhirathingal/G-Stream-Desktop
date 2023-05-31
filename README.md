@@ -133,8 +133,8 @@ Example:
 We can select the game we want from the radio group. The new game pad mapping gets added to the bottom of the list. we
 can then select the new game to use the new mappings.
 
-## Gameplay Screenshots
+### Gameplay Screenshots
 
-[todo - PIC Desktop GIF]
+https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE/assets/94210466/7c821e31-b0d4-4cfd-bdbf-e1c02176a487
 
-[todo - PIC Android GIF]
+The above video showcases the gameplay on both the android and the Windows side. The above screen is for the android side and the below one is for the Desktop side. This represents the latency and quality of gameplay. The UI gamepads and trackpads can be used to control the game. You can set custom keymaps for each button in the desktop app to modify gameplay in the desktop application. The buttons also support long presses.
