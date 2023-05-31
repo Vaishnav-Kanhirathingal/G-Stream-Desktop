@@ -133,7 +133,7 @@ Example:
 We can select the game we want from the radio group. The new game pad mapping gets added to the bottom of the list. we
 can then select the new game to use the new mappings.
 
-### Gameplay Screenshots
+### Gameplay Demo
 
 https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE/assets/94210466/7c821e31-b0d4-4cfd-bdbf-e1c02176a487
 
