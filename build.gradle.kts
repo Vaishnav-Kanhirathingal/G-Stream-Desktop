@@ -33,11 +33,13 @@ tasks.withType<KotlinCompile> {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "UI.MainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb,TargetFormat.Exe)
             packageName = "G-Stream-Desktop"
             packageVersion = "1.0.0"
+            windows {
+            }
         }
     }
 }

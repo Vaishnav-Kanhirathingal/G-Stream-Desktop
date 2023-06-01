@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.toPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import com.google.gson.Gson
 import connection.ConnectionData
@@ -37,14 +38,15 @@ import java.net.URL
 import java.util.*
 import javax.imageio.ImageIO
 
-fun main() {
+fun main(args: Array<String>) {
     application {
         Window(
             icon = getImageFromUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/blob/main/src/main/resources/app_icon_mipmap/mipmap-hdpi/ic_launcher.png?raw=true"),
             title = "G-Stream",
             onCloseRequest = ::exitApplication,
             resizable = true,
-            content = { MaterialTheme { app() } }
+            content = { MaterialTheme { app() } },
+            state = WindowState(height = 660.dp, width = 700.dp)
         )
     }
 }
@@ -114,7 +116,7 @@ fun app() {
                     }
                 }
             )
-            linksRow()
+            linksRow(modifier = Modifier.fillMaxWidth())
             gameOptionBox(gameList = gameList)
         }
     )
@@ -177,20 +179,23 @@ fun addGameTextField(addGameToList: (String) -> Unit) {
 }
 
 @Composable
-fun linksRow() {
+fun linksRow(modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         content = {
             Button(
+                modifier = Modifier.weight(1f),
                 onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-Desktop/blob/main/README.md") },
                 content = { Text(text = "Desktop Documentation") }
             )
             Button(
+                modifier = Modifier.weight(1f),
                 onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE/blob/main/README.md") },
                 content = { Text(text = "Android Documentation") }
             )
             Button(
+                modifier = Modifier.weight(1f),
                 onClick = { openUrl("https://github.com/Vaishnav-Kanhirathingal/G-Stream-MOBILE/releases") },
                 content = { Text(text = "Android APK download") }
             )
